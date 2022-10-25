@@ -20,7 +20,7 @@ export default function ReloadPrompt() {
   } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
       // eslint-disable-next-line no-console
-      console.log(`Service Worker at: ${swUrl}`)
+      console.log(`Service Worker [ReloadPrompt] at: ${swUrl}`)
       // @ts-expect-error just ignore
       if (reloadSW === 'true') {
         r && setInterval(() => {
