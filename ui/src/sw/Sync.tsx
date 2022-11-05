@@ -1,26 +1,29 @@
 import * as React from 'react'
+import { useLocation } from 'react-router-dom'
 import { useRegisterSW } from 'virtual:pwa-register/react'
-import { pwaInfo } from 'virtual:pwa-info'
+import { useLocalStorage } from 'usehooks-ts';
 
-// eslint-disable-next-line no-console
-console.log(pwaInfo)
+// Attempt sync every 30-seconds
+const intervalMs = 30 * 1000
 
-const intervalMS = 30 * 1000 // 30-second interval
+// Enable sync only if we are in the `/collector` route
+const syncEnabledPaths = ['/collector']
 
 export default function Sync() {
+  const { pathname } = useLocation()
+  const [offlineData] = useLocalStorage('offlineData', [])
+
   useRegisterSW({
     onRegisteredSW(swUrl, r) {
       console.log(`Service Worker [Sync] at: ${swUrl}`)
       r && setInterval(() => {
         r.update()
 
-        // TODO: Add sync logic here.
-        if (navigator.onLine) {
-          console.log('online');
-        } else {
-          console.log('offline');
+        if (navigator.onLine && syncEnabledPaths.includes(pathname) && offlineData.length > 0) {
+          // TODO: add sync logic
+          console.log('online.. attempting sync');
         }
-      }, intervalMS)
+      }, intervalMs)
     },
   })
 

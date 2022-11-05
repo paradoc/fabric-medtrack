@@ -12,10 +12,12 @@
     "serve": "vite preview --host"
   },
   "dependencies": {
+    "rambda": "^7.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.4.2",
-    "react-router-dom": "^6.4.2"
+    "react-router-dom": "^6.4.2",
+    "usehooks-ts": "^2.9.1"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.1",

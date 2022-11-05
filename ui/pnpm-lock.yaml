@@ -8,11 +8,13 @@ specifiers:
   '@types/react-router-dom': ^5.3.3
   '@vitejs/plugin-react': ^2.1.0
   cross-env: ^7.0.3
+  rambda: ^7.3.0
   react: ^18.2.0
   react-dom: ^18.2.0
   react-router: ^6.4.2
   react-router-dom: ^6.4.2
   typescript: ^4.6.4
+  usehooks-ts: ^2.9.1
   vite: ^3.1.0
   vite-plugin-pwa: ^0.13.1
   workbox-core: ^6.5.4
@@ -21,10 +23,12 @@ specifiers:
   workbox-window: ^6.5.4
 
 dependencies:
+  rambda: 7.3.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router: 6.4.2_react@18.2.0
   react-router-dom: 6.4.2_biqbaboplfbrettd7655fr4n2y
+  usehooks-ts: 2.9.1_biqbaboplfbrettd7655fr4n2y
 
 devDependencies:
   '@rollup/plugin-replace': 5.0.1
@@ -2620,6 +2624,10 @@ packages:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
 
+  /rambda/7.3.0:
+    resolution: {integrity: sha512-RFVofZYaG2TaVcxjnM0ejdVWf/59rFq1f57OGnjP3GT/bthzFw0GVr5rkP9PKbVlEuF/Y7bOVPLfiiYfxq/EWQ==}
+    dev: false
+
   /randombytes/2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
@@ -3036,6 +3044,17 @@ packages:
     dependencies:
       punycode: 2.1.1
     dev: true
+
+  /usehooks-ts/2.9.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-2FAuSIGHlY+apM9FVlj8/oNhd+1y+Uwv5QNkMQz1oSfdHk4PXo1qoCw9I5M7j0vpH8CSWFJwXbVPeYDjLCx9PA==}
+    engines: {node: '>=16.15.0', npm: '>=8'}
+    peerDependencies:
+      react: ^16.8.0  || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
 
   /vite-plugin-pwa/0.13.1_a24bsgtcozgewh66gr7y47mcdm:
     resolution: {integrity: sha512-NR3dIa+o2hzlzo4lF4Gu0cYvoMjSw2DdRc6Epw1yjmCqWaGuN86WK9JqZie4arNlE1ZuWT3CLiMdiX5wcmmUmg==}

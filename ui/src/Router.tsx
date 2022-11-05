@@ -11,9 +11,10 @@ export default function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route path="collector" element={<Collector />}></Route>
-          <Route path="dispatcher" element={<Dispatcher />}></Route>
-          <Route path="watcher" element={<Watcher />}></Route>
+          <Route path="collector" element={<Collector />} />
+          <Route path="dispatcher" element={<Dispatcher />} />
+          <Route path="watcher" element={<Watcher />} />
+          <Route path="*" element={<>404</>} />
         </Route>
       </Routes>
     </BrowserRouter>
