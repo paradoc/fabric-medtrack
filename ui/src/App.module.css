@@ -1,0 +1,13 @@
+.app {
+  display: grid;
+  width: 100%;
+  justify-content: center;
+}
+
+.title {
+  font-weight: 500;
+}
+
+.built {
+  color: #333;
+}
