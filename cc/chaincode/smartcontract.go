@@ -32,10 +32,19 @@ type Medication struct {
 // Insert struct field in alphabetic order => to achieve determinism across languages
 // golang keeps the order when marshal to json but doesn't order automatically
 type Asset struct {
-	DispatchID string     `json:"dispatch_id"`
-	History    History    `json:"history"`
-	Medication Medication `json:"medication"`
-	UserID     string     `json:"user_id"`
+	DispatchID  string       `json:"dispatch_id"`
+	History     History      `json:"history"`
+	Medications []Medication `json:"medications"`
+	UserID      string       `json:"user_id"`
+}
+
+func allTrue(b []bool) bool {
+	for _, v := range b {
+		if v == false {
+			return false
+		}
+	}
+	return true
 }
 
 // InitLedger adds a base set of assets to the ledger
@@ -44,11 +53,13 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 		{
 			UserID:     "genesis-user",
 			DispatchID: "genesis-dispatch",
-			Medication: Medication{
-				BrandName:   "",
-				GenericName: "med-name-generic",
-				Frequency:   "PT24H",
-				EndAfterN:   0,
+			Medications: []Medication{
+				{
+					BrandName:   "",
+					GenericName: "med-name-generic",
+					Frequency:   "PT24H",
+					EndAfterN:   0,
+				},
 			},
 			History: History{
 				StartedAt:  "",
@@ -161,16 +172,20 @@ func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, 
 
 	// overwriting original asset with new asset
 	asset := Asset{
-		DispatchID: id,
-		UserID:     currentAsset.UserID,
-		Medication: currentAsset.Medication,
+		DispatchID:  id,
+		UserID:      currentAsset.UserID,
+		Medications: currentAsset.Medications,
 	}
 
 	now := time.Now().Format("2006/01/02 15:04:05")
 	if currentAsset.History.StartedAt != "" {
 		asset.History = currentAsset.History
 		asset.History.Timestamps = append(asset.History.Timestamps, now)
-		if asset.Medication.EndAfterN == len(asset.History.Timestamps) {
+		shouldEnd := make([]bool, len(asset.Medications))
+		for i, medication := range asset.Medications {
+			shouldEnd[i] = medication.EndAfterN == len(asset.History.Timestamps)
+		}
+		if ended := allTrue(shouldEnd); ended == true {
 			asset.History.EndedAt = now
 		}
 	} else {
