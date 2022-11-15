@@ -1,0 +1,16 @@
+Name: read-api
+Host: 0.0.0.0
+Port: 8888
+
+MspId: Org1MSP
+CryptoPath: ../../../network-k8s/build/
+
+# path from read.go
+CertPath: ../../network-k8s/build/enrollments/org1/users/org1admin/msp/signcerts/cert.pem
+KeyPath: ../../network-k8s/build/enrollments/org1/users/org1admin/msp/keystore/
+TlsCertPath: ../../network-k8s/build/channel-msp/peerOrganizations/org1/msp/tlscacerts/tlsca-signcert.pem
+PeerEndpoint: org1-peer1.localho.st:443
+GatewayPeer: org1-peer1.localho.st
+
+ChaincodeName: test-cc
+ChannelName: mychannel
