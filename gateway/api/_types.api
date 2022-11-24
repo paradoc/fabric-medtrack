@@ -1,0 +1,14 @@
+syntax = "v1"
+
+type History {
+	EndedAt    string   `json:"ended_at"`
+	StartedAt  string   `json:"started_at"`
+	Timestamps []string `json:"timestamps"`
+}
+
+type Medication {
+	BrandName   string `json:"brand_name"`
+	EndAfterN   int    `json:"end_after_n"`
+	Frequency   string `json:"frequency"`
+	GenericName string `json:"generic_name"`
+}

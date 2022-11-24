@@ -1,0 +1,17 @@
+syntax = "v1"
+
+info (
+	title: "PUT /update"
+	desc: ""
+	author: "paradoc"
+	email: "coprada.mj@gmail.com"
+)
+
+type UpdateRequest {
+  DispatchId string `path:"id"`
+}
+
+service gateway {
+	@handler UpdateAsset
+	put /update (UpdateRequest)
+}
