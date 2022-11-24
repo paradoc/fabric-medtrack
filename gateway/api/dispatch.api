@@ -1,0 +1,21 @@
+syntax = "v1"
+
+info (
+	title: "POST /dispatch"
+	desc: ""
+	author: "paradoc"
+	email: "coprada.mj@gmail.com"
+)
+
+type DispatchRequest {
+	Medications []Medication `form:"medications"`
+}
+
+type DispatchResponse {
+	DispatchId string `json:"dispatch_id"`
+}
+
+service gateway {
+	@handler DispatchAsset
+	post /dispatch (DispatchRequest) returns (DispatchResponse)
+}

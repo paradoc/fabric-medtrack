@@ -1,0 +1,22 @@
+syntax = "v1"
+
+info (
+	title: "GET /query"
+	desc: ""
+	author: "paradoc"
+	email: "coprada.mj@gmail.com"
+)
+
+type QueryRequest {
+  GenericName string  `path:"gn"`
+	Timestamps []string `path:"ts"`
+}
+
+type QueryResponse {
+	ComplianceRate float64 `json:"compliance_rate"`
+}
+
+service gateway {
+	@handler QueryData
+	get /query (QueryRequest) returns (QueryResponse)
+}

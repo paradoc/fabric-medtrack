@@ -14,12 +14,33 @@ type Medication struct {
 	GenericName string `json:"generic_name"`
 }
 
-type Request struct {
+type DispatchRequest struct {
+	Medications []Medication `form:"medications"`
+}
+
+type DispatchResponse struct {
+	DispatchId string `json:"dispatch_id"`
+}
+
+type QueryRequest struct {
+	GenericName string   `path:"gn"`
+	Timestamps  []string `path:"ts"`
+}
+
+type QueryResponse struct {
+	ComplianceRate float64 `json:"compliance_rate"`
+}
+
+type ReadRequest struct {
 	Id string `path:"id"`
 }
 
-type Response struct {
+type ReadResponse struct {
 	DispatchId  string       `json:"dispatch_id"`
 	History     History      `json:"history"`
 	Medications []Medication `json:"medications"`
+}
+
+type UpdateRequest struct {
+	DispatchId string `path:"id"`
 }

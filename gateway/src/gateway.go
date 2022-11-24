@@ -5,15 +5,15 @@ import (
 	"fmt"
 
 	"gateway/connection"
-	"gateway/read/internal/config"
-	"gateway/read/internal/handler"
-	"gateway/read/internal/svc"
+	"gateway/src/internal/config"
+	"gateway/src/internal/handler"
+	"gateway/src/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/read-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/gateway.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -33,5 +33,4 @@ func main() {
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
-
 }

@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"gateway/read/internal/svc"
-	"gateway/read/internal/types"
+	"gateway/src/internal/svc"
+	"gateway/src/internal/types"
 
 	"github.com/hyperledger/fabric-gateway/pkg/client"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -27,7 +27,7 @@ func NewGetAssetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetAsset
 	}
 }
 
-func (l *GetAssetLogic) GetAsset(req *types.Request) (resp *[]types.Response, err error) {
+func (l *GetAssetLogic) GetAsset(req *types.ReadRequest) (resp *[]types.ReadResponse, err error) {
 	assets := getAllAssets(l.svcCtx.Gateway.Contract)
 	err = json.Unmarshal(assets, &resp)
 	if err != nil {

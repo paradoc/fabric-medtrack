@@ -2,7 +2,7 @@ package svc
 
 import (
 	"gateway/connection"
-	"gateway/read/internal/config"
+	"gateway/src/internal/config"
 )
 
 type ServiceContext struct {

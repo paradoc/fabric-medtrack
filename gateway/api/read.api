@@ -1,0 +1,23 @@
+syntax = "v1"
+
+info (
+	title: "GET /read"
+	desc: ""
+	author: "paradoc"
+	email: "coprada.mj@gmail.com"
+)
+
+type ReadRequest {
+	Id string `path:"id"`
+}
+
+type ReadResponse {
+	DispatchId  string       `json:"dispatch_id"`
+	History     History      `json:"history"`
+	Medications []Medication `json:"medications"`
+}
+
+service gateway {
+	@handler GetAsset
+	get /read/:id (ReadRequest) returns (ReadResponse)
+}
