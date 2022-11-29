@@ -47,5 +47,5 @@ type ReadResponse struct {
 }
 
 type UpdateRequest struct {
-	DispatchId string `path:"id"`
+	DispatchId string `json:"id"`
 }

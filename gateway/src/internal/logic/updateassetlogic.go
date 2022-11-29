@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
 	"gateway/src/internal/svc"
 	"gateway/src/internal/types"
@@ -24,7 +25,10 @@ func NewUpdateAssetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Updat
 }
 
 func (l *UpdateAssetLogic) UpdateAsset(req *types.UpdateRequest) error {
-	// todo: add your logic here and delete this line
-
+	fmt.Println("Submit Transaction: [AddHistory]")
+	_, err := l.svcCtx.Gateway.Contract.SubmitTransaction("AddHistory", req.DispatchId)
+	if err != nil {
+		panic(fmt.Errorf("failed to submit transaction: %w", err))
+	}
 	return nil
 }

@@ -36,7 +36,7 @@ func (l *DispatchAssetLogic) DispatchAsset(req *types.DispatchRequest) (resp *ty
 
 // Create a single asset.
 func createAsset(contract *client.Contract, medications []types.Medication, dispatchId string) error {
-	fmt.Println("Evaluate Transaction: [CreateAsset]")
+	fmt.Println("Submit Transaction: [CreateAsset]")
 	asset := types.Asset{
 		ReadResponse: types.ReadResponse{
 			DispatchId:  dispatchId,
