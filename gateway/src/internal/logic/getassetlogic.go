@@ -1,7 +1,6 @@
 package logic
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -74,13 +73,4 @@ func getAsset(contract *client.Contract, id string) []byte {
 		panic(fmt.Errorf("failed to evaluate transaction: %w", err))
 	}
 	return evaluateResult
-}
-
-// Format JSON data
-func formatJSON(data []byte) string {
-	var prettyJSON bytes.Buffer
-	if err := json.Indent(&prettyJSON, data, " ", ""); err != nil {
-		panic(fmt.Errorf("failed to parse JSON: %w", err))
-	}
-	return prettyJSON.String()
 }
