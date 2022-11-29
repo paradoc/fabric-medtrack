@@ -8,7 +8,7 @@ info (
 )
 
 type ReadRequest {
-	Id string `path:"id"`
+	Id string `path:"id,optional"`
 }
 
 type ReadResponse {

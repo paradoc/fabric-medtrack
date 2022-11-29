@@ -32,7 +32,7 @@ type QueryResponse struct {
 }
 
 type ReadRequest struct {
-	Id string `path:"id"`
+	Id string `path:"id,optional"`
 }
 
 type ReadResponse struct {

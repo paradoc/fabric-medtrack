@@ -38,6 +38,12 @@ type Asset struct {
 	UserID      string       `json:"user_id"`
 }
 
+type AssetNotFoundError struct{}
+
+func (err *AssetNotFoundError) Error() string {
+	return "asset not found"
+}
+
 func allTrue(b []bool) bool {
 	for _, v := range b {
 		if v == false {
@@ -119,7 +125,7 @@ func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, i
 		return nil, fmt.Errorf("failed to read from world state: %v", err)
 	}
 	if assetJSON == nil {
-		return nil, fmt.Errorf("the asset %s does not exist", id)
+		return nil, &AssetNotFoundError{}
 	}
 
 	var asset Asset

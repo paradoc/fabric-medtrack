@@ -34,6 +34,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
+				Path:    "/read",
+				Handler: GetAssetHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
 				Path:    "/read/:id",
 				Handler: GetAssetHandler(serverCtx),
 			},
