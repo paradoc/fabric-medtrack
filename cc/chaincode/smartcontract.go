@@ -165,8 +165,8 @@ func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 	return assets, nil
 }
 
-// AddHistory pushes the current timestamp into the History.Timestamps array
-func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, id string) error {
+// AddHistory appends timestamps into the History.Timestamps array
+func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, id string, timestamps []string) error {
 	exists, err := s.AssetExists(ctx, id)
 	if err != nil {
 		return err
@@ -176,6 +176,10 @@ func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, 
 	}
 	currentAsset, err := s.ReadAsset(ctx, id)
 
+	if currentAsset.History.EndedAt != "" {
+		return fmt.Errorf("current asset %s has ended", id)
+	}
+
 	// overwriting original asset with new asset
 	asset := Asset{
 		DispatchID:  id,
@@ -183,22 +187,32 @@ func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, 
 		Medications: currentAsset.Medications,
 	}
 
-	now := time.Now().Format("2006/01/02 15:04:05")
+	limitTsLen := currentAsset.Medications[0].EndAfterN
+
 	if currentAsset.History.StartedAt != "" {
 		asset.History = currentAsset.History
-		asset.History.Timestamps = append(asset.History.Timestamps, now)
+		sanitizedTs := append(asset.History.Timestamps, timestamps...)
+		if len(sanitizedTs) > limitTsLen {
+			sanitizedTs = sanitizedTs[:limitTsLen]
+		}
+		asset.History.Timestamps = sanitizedTs
 		shouldEnd := make([]bool, len(asset.Medications))
 		for i, medication := range asset.Medications {
 			shouldEnd[i] = medication.EndAfterN == len(asset.History.Timestamps)
 		}
 		if ended := allTrue(shouldEnd); ended == true {
-			asset.History.EndedAt = now
+			asset.History.EndedAt = sanitizedTs[limitTsLen-1]
 		}
 	} else {
+		sanitizedTs := timestamps
+		if len(timestamps) > limitTsLen {
+			sanitizedTs = timestamps[:limitTsLen]
+		}
+
 		asset.History = History{
-			StartedAt:  now,
+			StartedAt:  timestamps[0],
 			EndedAt:    "",
-			Timestamps: []string{now},
+			Timestamps: sanitizedTs,
 		}
 	}
 
