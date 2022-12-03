@@ -73,6 +73,7 @@ function deploy_chaincode() {
   local cc_folder=$(absolute_path $2)
   local temp_folder=$(mktemp -d)
   local cc_package=${temp_folder}/${cc_name}.tgz
+  local cc_sequence=$3
 
   prepare_chaincode_image ${cc_folder} ${cc_name}
   package_chaincode       ${cc_name} ${cc_label} ${cc_package}
@@ -82,7 +83,7 @@ function deploy_chaincode() {
     launch_chaincode      ${cc_name} ${CHAINCODE_ID} ${CHAINCODE_IMAGE}
   fi
 
-  activate_chaincode      ${cc_name} ${cc_package}
+  activate_chaincode      ${cc_name} ${cc_package} ${cc_sequence}
 }
 
 # Prepare a chaincode image for use in a builder package.
@@ -136,12 +137,13 @@ function publish_chaincode_image() {
 function activate_chaincode() {
   local cc_name=$1
   local cc_package=$2
+  local cc_sequence=$3
 
   set_chaincode_id    ${cc_package}
 
   install_chaincode   ${cc_package}
-  approve_chaincode   ${cc_name} ${CHAINCODE_ID}
-  commit_chaincode    ${cc_name}
+  approve_chaincode   ${cc_name} ${CHAINCODE_ID} ${cc_sequence}
+  commit_chaincode    ${cc_name} ${cc_sequence}
 }
 
 function query_chaincode() {
@@ -346,7 +348,8 @@ function approve_chaincode() {
   local peer=peer1
   local cc_name=$1
   local cc_id=$2
-  push_fn "Approving chaincode ${cc_name} with ID ${cc_id}"
+  local cc_sequence=$3
+  push_fn "Approving chaincode ${cc_name} with ID ${cc_id} and sequence number: ${cc_sequence}"
 
   export_peer_context $org $peer
 
@@ -356,7 +359,7 @@ function approve_chaincode() {
     --name          ${cc_name} \
     --version       1 \
     --package-id    ${cc_id} \
-    --sequence      1 \
+    --sequence      ${cc_sequence} \
     --orderer       org0-orderer1.${DOMAIN}:${NGINX_HTTPS_PORT} \
     --connTimeout   ${ORDERER_TIMEOUT} \
     --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderer1/tls/signcerts/tls-cert.pem
@@ -369,6 +372,7 @@ function commit_chaincode() {
   local org=org1
   local peer=peer1
   local cc_name=$1
+  local cc_sequence=$2
   push_fn "Committing chaincode ${cc_name}"
 
   export_peer_context $org $peer
@@ -378,7 +382,7 @@ function commit_chaincode() {
     --channelID     ${CHANNEL_NAME} \
     --name          ${cc_name} \
     --version       1 \
-    --sequence      1 \
+    --sequence      ${cc_sequence} \
     --orderer       org0-orderer1.${DOMAIN}:${NGINX_HTTPS_PORT} \
     --connTimeout   ${ORDERER_TIMEOUT} \
     --tls --cafile  ${TEMP_DIR}/channel-msp/ordererOrganizations/org0/orderers/org0-orderer1/tls/signcerts/tls-cert.pem

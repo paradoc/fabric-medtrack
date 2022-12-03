@@ -19,11 +19,11 @@ func UpdateAssetHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := logic.NewUpdateAssetLogic(r.Context(), svcCtx)
-		err := l.UpdateAsset(&req)
+		resp, err := l.UpdateAsset(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			httpx.Ok(w)
+			httpx.OkJson(w, resp)
 		}
 	}
 }

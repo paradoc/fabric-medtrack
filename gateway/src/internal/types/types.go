@@ -47,5 +47,10 @@ type ReadResponse struct {
 }
 
 type UpdateRequest struct {
-	DispatchId string `json:"id"`
+	DispatchId string 	`json:"id"`
+	Timestamps []string `json:"timestamps"`
+}
+
+type UpdateResponse struct {
+	Status string `json:"status"`
 }
