@@ -30,6 +30,7 @@ export const sync = createAsyncThunk<any, string>(
       return rejectWithValue(response.statusText)
     } else {
       console.log('sync ok')
+      window.location.reload()
     }
   }
 )

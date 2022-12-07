@@ -19,17 +19,20 @@ export default function Sync() {
   useRegisterSW({
     onRegisteredSW(swUrl, r) {
       console.log(`Service Worker [Sync] at: ${swUrl}`)
-      r && setInterval(() => {
-        r.update()
+      r &&
+        setInterval(() => {
+          r.update()
 
-        if (navigator.onLine && syncEnabledPaths.includes(pathname)) {
-          const pendingSync = JSON.parse(window.localStorage.getItem('pendingSync') ?? "{}");
-          if (rx && rx in pendingSync && pendingSync[rx].length > 0) {
-            console.log('syncing offline data..');
-            dispatch(sync(rx))
+          if (navigator.onLine && syncEnabledPaths.includes(pathname)) {
+            const pendingSync = JSON.parse(
+              window.localStorage.getItem('pendingSync') ?? '{}'
+            )
+            if (rx && rx in pendingSync && pendingSync[rx].length > 0) {
+              console.log('syncing offline data..')
+              dispatch(sync(rx))
+            }
           }
-        }
-      }, intervalMs)
+        }, intervalMs)
     },
   })
 
