@@ -19,13 +19,13 @@ export default function ReloadPrompt() {
       console.log(`Service Worker [ReloadPrompt] at: ${swUrl}`)
       // @ts-expect-error just ignore
       if (reloadSW === 'true') {
-        r && setInterval(() => {
-          // eslint-disable-next-line no-console
-          console.log('Checking for sw update')
-          r.update()
-        }, 20000 /* 20s for testing purposes */)
-      }
-      else {
+        r &&
+          setInterval(() => {
+            // eslint-disable-next-line no-console
+            console.log('Checking for sw update')
+            r.update()
+          }, 20000 /* 20s for testing purposes */)
+      } else {
         // eslint-disable-next-line prefer-template,no-console
         console.log('SW Registered: ' + r)
       }
@@ -43,18 +43,33 @@ export default function ReloadPrompt() {
 
   return (
     <div className="ReloadPrompt-container">
-      { (offlineReady || needRefresh)
-          && <div className={styles['ReloadPrompt-toast']}>
-            <div className={styles['ReloadPrompt-message']}>
-              { offlineReady
-                ? <span>App ready to work offline</span>
-                : <span>New content available, click on reload button to update.</span>
-              }
-            </div>
-            { needRefresh && <button className={styles['ReloadPrompt-toast-button']} onClick={() => updateServiceWorker(true)}>Reload</button> }
-            <button className={styles['ReloadPrompt-toast-button']} onClick={() => close()}>Close</button>
+      {(offlineReady || needRefresh) && (
+        <div className={styles['ReloadPrompt-toast']}>
+          <div className={styles['ReloadPrompt-message']}>
+            {offlineReady ? (
+              <span>App ready to work offline</span>
+            ) : (
+              <span>
+                New content available, click on reload button to update.
+              </span>
+            )}
           </div>
-      }
+          {needRefresh && (
+            <button
+              className={styles['ReloadPrompt-toast-button']}
+              onClick={() => updateServiceWorker(true)}
+            >
+              Reload
+            </button>
+          )}
+          <button
+            className={styles['ReloadPrompt-toast-button']}
+            onClick={() => close()}
+          >
+            Close
+          </button>
+        </div>
+      )}
       <div className={styles['ReloadPrompt-date']}>{buildDate}</div>
     </div>
   )

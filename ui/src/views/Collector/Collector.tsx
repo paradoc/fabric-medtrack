@@ -1,9 +1,17 @@
-import React, { PropsWithChildren, useLayoutEffect, useMemo, useState } from 'react'
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useLocation } from 'react-router-dom'
-import { useFetch } from 'usehooks-ts'
+import { useFetch, useLocalStorage } from 'usehooks-ts'
+import { difference, prop } from 'rambda'
+import dayjs from 'dayjs'
+import produce from 'immer'
 
 import styles from './Collector.module.css'
-
 
 // type History struct {
 // 	EndedAt    string   `json:"ended_at"`
@@ -25,75 +33,186 @@ import styles from './Collector.module.css'
 // 	UserID     string     `json:"user_id"`
 // }
 
-
 interface Medication {
-  nameOrId: string
+  brand_name: string
+  generic_name: string
   frequency: string
-  isComplete: boolean 
+  end_after_n: number
 }
 
 interface RxHistory {
-  startedAt: string
-  endedAt: string | null
+  started_at: string
+  ended_at: string | null
   timestamps: string[]
 }
 
 interface Session {
-  userIdOrName: string | null
-  dispatchId: string
-  rxHistory: RxHistory
-  medication: Medication
+  dispatch_id: string
+  history: RxHistory
+  medications: Medication[]
 }
 
 interface DataProps {
   rx: string | null
-  setComponentData: (a: any) => void
+  onError: () => void
 }
 
-function Data({ rx, children, setComponentData }: PropsWithChildren<DataProps>) {
-  if (!rx)
-    return <>{children}</>
+interface OfflineData {
+  [key: string]: {
+    // DispatchId to local session map
+    history: RxHistory
+    medications: Medication[]
+  }
+}
 
-  const { data, error } = useFetch<Session>('todo: integrate')
+interface PendingSyncData {
+  [key: string]: string[]
+}
 
-  useLayoutEffect(() => {
-    if (data) {
-      setComponentData({ data })
-    } else if (error || !data) {
-      setComponentData({})
+interface ListItemProps {
+  data: Medication
+  key: number
+  onClick: (a: boolean) => void
+}
+
+function ListItem({ data, key, onClick }: ListItemProps) {
+  const id = `${data.generic_name}-${data.brand_name}-${key}`
+  return (
+    <div>
+      <input
+        type="checkbox"
+        id={id}
+        onChange={(e) => onClick(e.currentTarget.checked)}
+      />
+      <label htmlFor={id}>
+        {data.generic_name} {data.brand_name}
+      </label>
+    </div>
+  )
+}
+
+function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
+  const [offlineData, setOfflineData] = useLocalStorage<OfflineData>(
+    'offlineData',
+    {}
+  )
+  const [pendingSync, setPendingSync] = useLocalStorage<PendingSyncData>(
+    'pendingSync',
+    {}
+  )
+  const [toggleCount, setToggleCount] = useState<number>(0)
+  const { data, error } = useFetch<Session[]>(`/api/read/${rx}`)
+  const currData = offlineData[rx ?? ''] ?? null
+  const isCompleted = currData?.history.ended_at !== '' ?? false
+
+  const onClickToggle = useCallback(
+    (toggled: boolean) => {
+      if (toggled) {
+        setToggleCount(toggleCount + 1)
+      } else {
+        setToggleCount(toggleCount - 1)
+      }
+    },
+    [toggleCount]
+  )
+
+  const submit = useCallback(() => {
+    if (rx && rx in pendingSync) {
+      const now = dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]')
+      const updatedPendingSyncData = produce(pendingSync[rx], (data) => {
+        data.push(now)
+      })
+      setPendingSync({ [rx]: updatedPendingSyncData })
+      // window.location.reload()
     }
-  }, [data, error])
+  }, [pendingSync, rx])
 
-  return <>{children}</>
+  // Fetches remote data, caches locally, and prepares to sync
+  useEffect(() => {
+    if (rx && data && data.length > 0) {
+      const [{ history, medications }] = data
+
+      if (currData) {
+        const session = { ...currData, history, medications }
+        const diff = difference(currData.history.timestamps, history.timestamps)
+        setOfflineData({ [rx]: session })
+        if (currData.history.ended_at === '' && diff.length > 0) {
+          setPendingSync({ [rx]: diff })
+        } else if (
+          history.ended_at !== '' ||
+          history.timestamps.length >
+            Math.max(...medications.map<number>(prop('end_after_n')))
+        ) {
+          setPendingSync({ [rx]: [] })
+        }
+      } else {
+        // assume all data has been synced
+        setOfflineData({
+          ...offlineData,
+          [rx]: {
+            history,
+            medications,
+          },
+        })
+        setPendingSync({ [rx]: [] })
+      }
+    }
+  }, [rx, currData, data])
+
+  // Trigger onError if we have no data available and we have received an error either online or offline
+  useEffect(() => {
+    if (error?.message.includes('NetworkError') && !currData) {
+      onError()
+    }
+  }, [currData, error, onError])
+
+  return (
+    <div className={styles.container}>
+      {children}
+      {currData && (
+        <div className={styles.content}>
+          {isCompleted ? (
+            <div>ありがとう</div>
+          ) : (
+            <>
+              <div className={styles.list}>
+                {currData.medications.map(
+                  (medication: Medication, i: number) => (
+                    <ListItem
+                      data={medication}
+                      key={i}
+                      onClick={onClickToggle}
+                    />
+                  )
+                )}
+              </div>
+              <button
+                onClick={submit}
+                disabled={!(toggleCount === currData?.medications.length ?? 0)}
+              >
+                OK
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function Collector() {
-  const [session, setSession] = useState<Session>()
-  const [hasFetched, setHasFetched] = useState(false)
   const [displayQRScanner, setDisplayQRScanner] = useState<boolean>()
   const { search } = useLocation()
-
   const searchParams = useMemo(() => new URLSearchParams(search), [search])
   const rx = searchParams.get('rx')
 
-  useLayoutEffect(() => {
-    if (session !== undefined) {
-      if (Object.keys(session).length > 0) {
-        setDisplayQRScanner(false)
-      } else {
-        setDisplayQRScanner(true)
-      }
-      setHasFetched(true)
-    }
-  }, [session])
-
   return (
     <div className={styles.collector}>
-      <Data rx={rx} setComponentData={setSession}>
-        <header>Hi {session?.userIdOrName ?? 'there'}!</header>
+      <Data rx={rx} onError={() => setDisplayQRScanner(true)}>
+        <header>Hi there!</header>
       </Data>
       <div className={styles.layout}>
-        {hasFetched && displayQRScanner && <>todo: QR here</>}
+        {displayQRScanner && <>todo: QR here</>}
       </div>
     </div>
   )

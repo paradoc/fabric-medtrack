@@ -8,30 +8,9 @@ import fs from 'fs'
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: 'development',
   base: '/',
-  includeAssets: ['favicon.svg'],
-  manifest: {
-    name: 'PWA Router',
-    short_name: 'PWA Router',
-    theme_color: '#ffffff',
-    icons: [
-      {
-        src: 'pwa-192x192.png', // <== don't add slash, for testing
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: '/pwa-512x512.png', // <== don't remove slash, for testing
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      {
-        src: 'pwa-512x512.png', // <== don't add slash, for testing
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any maskable',
-      },
-    ],
-  },
+  includeAssets: ['*'],
+  // we'll use https://realfavicongenerator.net/ for manifest generation
+  manifest: false,
   devOptions: {
     enabled: process.env.SW_DEV === 'true',
     /* when using generateSW the PWA plugin will switch to classic */
@@ -49,8 +28,8 @@ if (process.env.SW === 'true') {
   pwaOptions.srcDir = 'src/sw'
   pwaOptions.filename = claims ? 'claims-sw.ts' : 'prompt-sw.ts'
   pwaOptions.strategies = 'injectManifest'
-  ;(pwaOptions.manifest as Partial<ManifestOptions>).name = 'PWA Inject Manifest'
-  ;(pwaOptions.manifest as Partial<ManifestOptions>).short_name = 'PWA Inject'
+    ; (pwaOptions.manifest as Partial<ManifestOptions>).name = 'PWA Inject Manifest'
+    ; (pwaOptions.manifest as Partial<ManifestOptions>).short_name = 'PWA Inject'
 }
 
 if (claims)
@@ -75,6 +54,14 @@ export default defineConfig({
       // generated via `mkcert localhost "*.example.com"`
       key: fs.readFileSync('./keys/localhost+1-key.pem'),
       cert: fs.readFileSync('./keys/localhost+1.pem'),
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8888',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
     }
   }
 })
