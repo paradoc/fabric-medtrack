@@ -3,35 +3,17 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useFetch, useLocalStorage } from 'usehooks-ts'
-import { difference, prop } from 'rambda'
+import { QrReader } from 'react-qr-reader'
+import { equals, difference, prop, last, head, sort } from 'rambda'
 import dayjs from 'dayjs'
 import produce from 'immer'
 
 import styles from './Collector.module.css'
-
-// type History struct {
-// 	EndedAt    string   `json:"ended_at"`
-// 	StartedAt  string   `json:"started_at"`
-// 	Timestamps []string `json:"timestamps"`
-// }
-
-// type Medication struct {
-// 	BrandName   string `json:"brand_name"`
-// 	EndAfterN   int    `json:"end_after_n"`
-// 	Frequency   string `json:"frequency"`
-// 	GenericName string `json:"generic_name"`
-// }
-
-// type Asset struct {
-// 	DispatchID string     `json:"dispatch_id"`
-// 	History    History    `json:"history"`
-// 	Medication Medication `json:"medication"`
-// 	UserID     string     `json:"user_id"`
-// }
 
 interface Medication {
   brand_name: string
@@ -71,18 +53,27 @@ interface PendingSyncData {
 
 interface ListItemProps {
   data: Medication
-  key: number
   onClick: (a: boolean) => void
+  shouldReset: boolean
 }
 
-function ListItem({ data, key, onClick }: ListItemProps) {
-  const id = `${data.generic_name}-${data.brand_name}-${key}`
+function ListItem({ data, onClick, shouldReset }: ListItemProps) {
+  const id = `${data.generic_name}-${data.brand_name}`
+  const ref = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (shouldReset && ref.current !== null) {
+      ref.current.checked = false
+    }
+  }, [ref, shouldReset])
+
   return (
-    <div>
+    <div className={styles.listItem}>
       <input
         type="checkbox"
         id={id}
         onChange={(e) => onClick(e.currentTarget.checked)}
+        ref={ref}
       />
       <label htmlFor={id}>
         {data.generic_name} {data.brand_name}
@@ -101,6 +92,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
     {}
   )
   const [toggleCount, setToggleCount] = useState<number>(0)
+  const [shouldResetList, setShouldResetList] = useState(false)
   const { data, error } = useFetch<Session[]>(`/api/read/${rx}`)
   const currData = offlineData[rx ?? ''] ?? null
   const isCompleted = currData?.history.ended_at !== '' ?? false
@@ -116,65 +108,117 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
     [toggleCount]
   )
 
+  useEffect(() => {
+    if (shouldResetList) {
+      setToggleCount(0)
+      setShouldResetList(false)
+    }
+  }, [shouldResetList])
+
   const submit = useCallback(() => {
     if (rx && rx in pendingSync) {
-      const now = dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]')
+      const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
       const updatedPendingSyncData = produce(pendingSync[rx], (data) => {
         data.push(now)
       })
-      setPendingSync({ [rx]: updatedPendingSyncData })
-      // window.location.reload()
+      setPendingSync({ ...pendingSync, [rx]: updatedPendingSyncData })
     }
-  }, [pendingSync, rx])
+    setShouldResetList(true)
+  }, [currData, pendingSync, rx])
 
   // Fetches remote data, caches locally, and prepares to sync
   useEffect(() => {
     if (rx && data && data.length > 0) {
       const [{ history, medications }] = data
 
-      if (currData) {
-        const session = { ...currData, history, medications }
-        const diff = difference(currData.history.timestamps, history.timestamps)
-        setOfflineData({ [rx]: session })
-        if (currData.history.ended_at === '' && diff.length > 0) {
-          setPendingSync({ [rx]: diff })
-        } else if (
-          history.ended_at !== '' ||
-          history.timestamps.length >
-            Math.max(...medications.map<number>(prop('end_after_n')))
-        ) {
-          setPendingSync({ [rx]: [] })
-        }
-      } else {
-        // assume all data has been synced
-        setOfflineData({
-          ...offlineData,
+      if (!currData) {
+        // Initialize local cache
+        setOfflineData((od) => ({
+          ...od,
           [rx]: {
             history,
             medications,
           },
+        }))
+        setPendingSync({ ...pendingSync, [rx]: [] })
+      } else {
+        const newHistory = produce(history, (h) => {
+          const tsDiff = difference(pendingSync[rx], h.timestamps)
+          if (pendingSync[rx].length > h.timestamps.length) {
+            h.timestamps.push(...tsDiff)
+          }
+          if (h.started_at === '' && pendingSync[rx].length > 0) {
+            h.started_at = head(pendingSync[rx]) as string
+          }
+          if (
+            h.ended_at === '' &&
+            h.timestamps.length >=
+              Math.max(...medications.map<number>(prop('end_after_n')))
+          ) {
+            h.ended_at = last(pendingSync[rx]) as string
+          }
         })
-        setPendingSync({ [rx]: [] })
+        if (!equals(currData, { history: newHistory, medications })) {
+          setOfflineData((od) => ({
+            ...od,
+            [rx]: {
+              history: newHistory,
+              medications,
+            },
+          }))
+        }
       }
     }
-  }, [rx, currData, data])
+  }, [rx, currData, pendingSync, data])
 
-  // Trigger onError if we have no data available and we have received an error either online or offline
+  // Trigger onError if we have no data available or we have received an error
   useEffect(() => {
-    if (error?.message.includes('NetworkError') && !currData) {
+    if (
+      (error?.message.includes('NetworkError') && data === undefined) ||
+      (data && data.length === 0)
+    ) {
       onError()
     }
-  }, [currData, error, onError])
+  }, [data, error, onError])
 
   return (
     <div className={styles.container}>
       {children}
       {currData && (
-        <div className={styles.content}>
+        <div
+          className={[
+            styles.content,
+            currData.history.timestamps.length > 0
+              ? styles['-three-layer']
+              : '',
+          ].join(' ')}
+        >
           {isCompleted ? (
-            <div>ありがとう</div>
+            <div className={styles.completed}>
+              <span>Thank you for your compliance!</span>
+              <span>
+                {pendingSync[rx ?? ''].length > 0
+                  ? 'Please go online to sync your data.'
+                  : 'You may delete this application from your home screen.'}
+              </span>
+            </div>
           ) : (
             <>
+              {currData.history.timestamps.length > 0 && (
+                <div className={styles.reminder}>
+                  It's been{' '}
+                  {dayjs().from(
+                    head(
+                      sort(
+                        (a: string, b: string) =>
+                          dayjs(b).isSameOrAfter(dayjs(a)) ? 1 : -1,
+                        currData?.history.timestamps
+                      )
+                    )
+                  )}{' '}
+                  since your last input.
+                </div>
+              )}
               <div className={styles.list}>
                 {currData.medications.map(
                   (medication: Medication, i: number) => (
@@ -182,6 +226,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
                       data={medication}
                       key={i}
                       onClick={onClickToggle}
+                      shouldReset={shouldResetList}
                     />
                   )
                 )}
@@ -209,11 +254,24 @@ export default function Collector() {
   return (
     <div className={styles.collector}>
       <Data rx={rx} onError={() => setDisplayQRScanner(true)}>
-        <header>Hi there!</header>
+        <header>
+          <span>Hi there!</span>
+          <button onClick={() => window.location.reload()}>reload</button>
+        </header>
       </Data>
-      <div className={styles.layout}>
-        {displayQRScanner && <>todo: QR here</>}
-      </div>
+      {displayQRScanner && (
+        <div className={styles.qrScanner}>
+          Please scan your QR code
+          <QrReader
+            constraints={{ facingMode: { ideal: 'environment' } }}
+            onResult={(result) => {
+              if (!!result) {
+                window.location.replace(result?.getText())
+              }
+            }}
+          />
+        </div>
+      )}
     </div>
   )
 }

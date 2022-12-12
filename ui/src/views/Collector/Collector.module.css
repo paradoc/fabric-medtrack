@@ -1,5 +1,49 @@
 .collector {
+  display: grid;
+  width: 80vw;
 }
 
-.layout {
+.data {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  row-gap: 8px;
+}
+
+.container > header {
+  display: grid;
+  grid-template-columns: max-content min-content;
+  justify-content: space-between;
+}
+
+.content {
+  display: grid;
+  grid-template-rows: 1fr 64px;
+}
+
+.content.-three-layer {
+  grid-template-rows: auto 1fr 64px;
+}
+
+.reminder {
+  display: grid;
+}
+
+.completed {
+  display: grid;
+}
+
+.list {
+  display: grid;
+  place-items: center;
+}
+
+.listItem {
+}
+
+.listItem:last-child{
 }
