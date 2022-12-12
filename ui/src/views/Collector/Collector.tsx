@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useFetch, useLocalStorage } from 'usehooks-ts'
+import { QrReader } from 'react-qr-reader'
 import { equals, difference, prop, last, head, sort } from 'rambda'
 import dayjs from 'dayjs'
 import produce from 'immer'
@@ -170,12 +171,15 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
     }
   }, [rx, currData, pendingSync, data])
 
-  // Trigger onError if we have no data available and we have received an error either online or offline
+  // Trigger onError if we have no data available or we have received an error
   useEffect(() => {
-    if (error?.message.includes('NetworkError') && !currData) {
+    if (
+      (error?.message.includes('NetworkError') && data === undefined) ||
+      (data && data.length === 0)
+    ) {
       onError()
     }
-  }, [currData, error, onError])
+  }, [data, error, onError])
 
   return (
     <div className={styles.container}>
@@ -256,7 +260,17 @@ export default function Collector() {
         </header>
       </Data>
       {displayQRScanner && (
-        <div className={styles.qrScanner}>todo: QR here</div>
+        <div className={styles.qrScanner}>
+          Please scan your QR code
+          <QrReader
+            constraints={{ facingMode: { ideal: 'environment' } }}
+            onResult={(result) => {
+              if (!!result) {
+                window.location.replace(result?.getText())
+              }
+            }}
+          />
+        </div>
       )}
     </div>
   )

@@ -15,7 +15,7 @@ export const sync = createAsyncThunk<any, string>(
   'collector/sync',
   async (id: string, { rejectWithValue }) => {
     const pendingSync = JSON.parse(window.localStorage.getItem('pendingSync') ?? "{}")
-    const response = await fetch(`http://localhost:8888/update`, {
+    const response = await fetch(`/api/update`, {
       method: 'PUT',
       body: JSON.stringify({ id, timestamps: pendingSync[id] }),
       headers: {'content-type':'application/json'}
