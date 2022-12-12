@@ -92,7 +92,6 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
   )
   const [toggleCount, setToggleCount] = useState<number>(0)
   const [shouldResetList, setShouldResetList] = useState(false)
-  const listRef = useRef<HTMLDivElement>(null)
   const { data, error } = useFetch<Session[]>(`/api/read/${rx}`)
   const currData = offlineData[rx ?? ''] ?? null
   const isCompleted = currData?.history.ended_at !== '' ?? false
@@ -216,7 +215,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
                   since your last input.
                 </div>
               )}
-              <div className={styles.list} ref={listRef}>
+              <div className={styles.list}>
                 {currData.medications.map(
                   (medication: Medication, i: number) => (
                     <ListItem
