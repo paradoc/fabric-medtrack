@@ -1,0 +1,55 @@
+.login {
+  display: grid;
+  place-content: center;
+  row-gap: 20px;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  row-gap: 4px;
+}
+
+.logo > strong {
+  font-weight: bold;
+  font-size: 48px;
+}
+
+.logo > span {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.form {
+  display: grid;
+  row-gap: 12px;
+}
+
+.form > input {
+  height: 32px;
+  width: 220px;
+  border-radius: 8px;
+  border: 1px solid lightgrey;
+  padding: 4px 8px;
+}
+
+.form > input.-error {
+  border: 1px solid lightcoral;
+}
+
+.form > button {
+  height: 36px;
+  width: 120px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  place-self: flex-end;
+}
+
+.form > button:enabled {
+  background-color: aquamarine;
+  color: #00774f;
+}
