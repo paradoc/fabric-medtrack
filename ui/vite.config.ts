@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react'
 import replace from '@rollup/plugin-replace'
 import fs from 'fs'
+import dayjs from 'dayjs'
 
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: 'development',
@@ -19,7 +20,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
   },
 }
 
-const replaceOptions = { __DATE__: new Date().toISOString() }
+const replaceOptions = { __DATE__: dayjs().format('YYYY-MM-DD HH:mm:ssZ[Z]') }
 const claims = process.env.CLAIMS === 'true'
 const reload = process.env.RELOAD_SW === 'true'
 const selfDestroying = process.env.SW_DESTROY === 'true'

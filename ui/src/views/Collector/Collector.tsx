@@ -13,9 +13,13 @@ import { equals, difference, prop, last, head, sort } from 'rambda'
 import dayjs from 'dayjs'
 import produce from 'immer'
 
+import ListItem from '../../components/ListItem'
+
+import Refresh from '../../assets/refresh.svg'
+
 import styles from './Collector.module.css'
 
-interface Medication {
+export interface Medication {
   brand_name: string
   generic_name: string
   frequency: string
@@ -51,37 +55,6 @@ interface PendingSyncData {
   [key: string]: string[]
 }
 
-interface ListItemProps {
-  data: Medication
-  onClick: (a: boolean) => void
-  shouldReset: boolean
-}
-
-function ListItem({ data, onClick, shouldReset }: ListItemProps) {
-  const id = `${data.generic_name}-${data.brand_name}`
-  const ref = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (shouldReset && ref.current !== null) {
-      ref.current.checked = false
-    }
-  }, [ref, shouldReset])
-
-  return (
-    <div className={styles.listItem}>
-      <input
-        type="checkbox"
-        id={id}
-        onChange={(e) => onClick(e.currentTarget.checked)}
-        ref={ref}
-      />
-      <label htmlFor={id}>
-        {data.generic_name} {data.brand_name}
-      </label>
-    </div>
-  )
-}
-
 function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
   const [offlineData, setOfflineData] = useLocalStorage<OfflineData>(
     'offlineData',
@@ -93,6 +66,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
   )
   const [toggleCount, setToggleCount] = useState<number>(0)
   const [shouldResetList, setShouldResetList] = useState(false)
+  const [isDue, setIsDue] = useState(false)
   const { data, error } = useFetch<Session[]>(`/api/read/${rx}`)
   const currData = offlineData[rx ?? ''] ?? null
   const isCompleted = currData?.history.ended_at !== '' ?? false
@@ -181,6 +155,17 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
     }
   }, [data, error, onError])
 
+  useEffect(() => {
+    if (currData) {
+      const { medications, history } = currData
+      const [{ frequency }] = medications
+      const latest = dayjs(last(history.timestamps) as string)
+      const dur = dayjs.duration(frequency)
+      const nextSchedule = latest.add(dur)
+      setIsDue(dayjs().isSameOrAfter(nextSchedule))
+    }
+  }, [currData])
+
   return (
     <div className={styles.container}>
       {children}
@@ -195,7 +180,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
         >
           {isCompleted ? (
             <div className={styles.completed}>
-              <span>Thank you for your compliance!</span>
+              <strong>Thank you for your compliance!</strong>
               <span>
                 {pendingSync[rx ?? ''].length > 0
                   ? 'Please go online to sync your data.'
@@ -204,20 +189,33 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
             </div>
           ) : (
             <>
-              {currData.history.timestamps.length > 0 && (
+              {isDue ? (
                 <div className={styles.reminder}>
-                  It's been{' '}
-                  {dayjs().from(
-                    head(
-                      sort(
-                        (a: string, b: string) =>
-                          dayjs(b).isSameOrAfter(dayjs(a)) ? 1 : -1,
-                        currData?.history.timestamps
-                      )
-                    )
-                  )}{' '}
-                  since your last input.
+                  <strong>Did you miss your medications?</strong>
+                  <span>
+                    Please tap on the medications below and press OK if you have
+                    taken it already.
+                  </span>
                 </div>
+              ) : (
+                currData.history.timestamps.length > 0 && (
+                  <div className={styles.reminder}>
+                    <span>It's been</span>
+                    <strong>
+                      {dayjs().from(
+                        head(
+                          sort(
+                            (a: string, b: string) =>
+                              dayjs(b).isSameOrAfter(dayjs(a)) ? 1 : -1,
+                            currData?.history.timestamps
+                          )
+                        ),
+                        true
+                      )}
+                    </strong>
+                    <span>since your last input.</span>
+                  </div>
+                )
               )}
               <div className={styles.list}>
                 {currData.medications.map(
@@ -234,6 +232,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
               <button
                 onClick={submit}
                 disabled={!(toggleCount === currData?.medications.length ?? 0)}
+                className={styles.submit}
               >
                 OK
               </button>
@@ -256,7 +255,12 @@ export default function Collector() {
       <Data rx={rx} onError={() => setDisplayQRScanner(true)}>
         <header>
           <span>Hi there!</span>
-          <button onClick={() => window.location.reload()}>reload</button>
+          <img
+            src={Refresh}
+            alt="refresh"
+            onClick={() => window.location.reload()}
+            className={styles.refresh}
+          />
         </header>
       </Data>
       {displayQRScanner && (
@@ -269,6 +273,7 @@ export default function Collector() {
                 window.location.replace(result?.getText())
               }
             }}
+            className={styles.scanner}
           />
         </div>
       )}

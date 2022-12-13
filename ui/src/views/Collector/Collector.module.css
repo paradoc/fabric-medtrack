@@ -1,6 +1,7 @@
 .collector {
   display: grid;
   width: 80vw;
+  padding: 24px 0;
 }
 
 .data {
@@ -11,18 +12,38 @@
 .container {
   display: grid;
   grid-template-rows: auto 1fr;
-  row-gap: 8px;
+  row-gap: 36px;
 }
 
 .container > header {
+  font-size: 24px;
+  font-weight: bold;
   display: grid;
   grid-template-columns: max-content min-content;
   justify-content: space-between;
+  align-items: center;
 }
 
 .content {
   display: grid;
   grid-template-rows: 1fr 64px;
+  margin-bottom: 16px;
+}
+
+.submit {
+  border: none;
+  border-radius: 16px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.submit:enabled {
+  background-color: aquamarine;
+  color: #00774f;
+}
+
+.refresh {
+  height: 36px;
 }
 
 .content.-three-layer {
@@ -31,19 +52,48 @@
 
 .reminder {
   display: grid;
+  text-align: center;
+  row-gap: 8px;
+}
+
+.reminder > span {
+  font-size: 14px;
+  color: #666;
+  line-height: 24px;
+}
+
+.reminder > strong {
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 32px;
 }
 
 .completed {
   display: grid;
+  row-gap: 24px;
+  place-items: center;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.completed > strong {
+  font-weight: bold;
+  font-size: 24px;
+  color: #333;
+}
+
+.completed > span {
+  font-size: 18px;
+  color: #888;
+  line-height: 26px;
+}
+
+.scanner {
+  max-width: 80%;
 }
 
 .list {
   display: grid;
-  place-items: center;
-}
-
-.listItem {
-}
-
-.listItem:last-child{
+  place-content: center;
+  row-gap: 24px;
 }

@@ -1,0 +1,35 @@
+.listItem {
+  box-shadow:
+    0 3px 6px rgba(0,0,0,0.15),
+    0 2px 4px rgba(0,0,0,0.12);
+  height: 64px;
+  display: grid;
+  place-items: center;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  padding: 8px 24px;
+  border-radius: 12px;
+}
+
+.listItem > input[type="checkbox"] {
+  accent-color: aquamarine;
+  width: 20px;
+  height: 20px;
+}
+
+.listItem > label {
+  display: grid;
+  row-gap: 8px;
+  width: 100%;
+}
+
+.listItem > label > strong {
+  font-weight: bold;
+  font-size: 20px;
+  color: #333;
+}
+
+.listItem > label > span {
+  font-size: 14px;
+  color: #999;
+}
