@@ -1,4 +1,11 @@
-import React, { ChangeEventHandler, useCallback, useRef, useState } from 'react'
+import React, {
+  ChangeEventHandler,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { Navigate } from 'react-router-dom'
 import { useSessionStorage } from 'usehooks-ts'
 import { compose, values, includes } from 'rambda'
@@ -24,10 +31,12 @@ export default function Login() {
     if (usernameRef.current && passwordRef.current) {
       const userVal = usernameRef.current.value
       const passVal = passwordRef.current.value
-      setLoginError(
+      const didError =
         !(userVal in _CREDENTIALS) || _CREDENTIALS[userVal] !== passVal
-      )
-      setIsLoggedIn(true)
+      setLoginError(didError)
+      if (!didError) {
+        setIsLoggedIn(true)
+      }
     }
   }, [usernameRef, passwordRef])
 
@@ -42,6 +51,14 @@ export default function Login() {
       }
     },
     []
+  )
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.nativeEvent.isComposing || e.key !== 'Enter') return
+      submit()
+    },
+    [submit]
   )
 
   return isLoggedIn ? (
@@ -60,6 +77,7 @@ export default function Login() {
           onChange={checkNotEmpty}
           alt="username"
           className={loginError ? styles['-error'] : ''}
+          onKeyDown={handleKeyDown}
         />
         <input
           type="password"
@@ -67,6 +85,7 @@ export default function Login() {
           onChange={checkNotEmpty}
           alt="password"
           className={loginError ? styles['-error'] : ''}
+          onKeyDown={handleKeyDown}
         />
         <button
           disabled={compose(includes(false), values)(formState)}

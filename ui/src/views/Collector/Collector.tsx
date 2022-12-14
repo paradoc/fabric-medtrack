@@ -55,6 +55,23 @@ interface PendingSyncData {
   [key: string]: string[]
 }
 
+const ONE_MINUTE = 60 * 1000
+
+const LastInputTimer = ({ since }: { since: string }) => {
+  const [lastInput, setLastInput] = useState(dayjs().from(since, true))
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setLastInput(dayjs().from(since, true))
+    }, ONE_MINUTE)
+    return () => {
+      clearInterval(id)
+    }
+  }, [since])
+
+  return <strong>{lastInput}</strong>
+}
+
 function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
   const [offlineData, setOfflineData] = useLocalStorage<OfflineData>(
     'offlineData',
@@ -201,18 +218,17 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
                 currData.history.timestamps.length > 0 && (
                   <div className={styles.reminder}>
                     <span>It's been</span>
-                    <strong>
-                      {dayjs().from(
+                    <LastInputTimer
+                      since={
                         head(
                           sort(
                             (a: string, b: string) =>
                               dayjs(b).isSameOrAfter(dayjs(a)) ? 1 : -1,
                             currData?.history.timestamps
                           )
-                        ),
-                        true
-                      )}
-                    </strong>
+                        ) as string
+                      }
+                    />
                     <span>since your last input.</span>
                   </div>
                 )

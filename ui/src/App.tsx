@@ -16,16 +16,12 @@ import Sync from './sw/Sync'
 import styles from './App.module.css'
 
 export default function App() {
-  // replaced dynamicaly
-  const date = '__DATE__'
-
   return (
     <main className={styles.app}>
       <Outlet />
       <div className={styles.meta}>
         <ReloadPrompt />
         <Sync />
-        <footer className={styles.built}>Built: {date}</footer>
       </div>
     </main>
   )

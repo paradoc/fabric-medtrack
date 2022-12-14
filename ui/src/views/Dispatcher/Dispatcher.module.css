@@ -1,0 +1,10 @@
+.container {
+  width: 100vw;
+}
+
+.container > aside {
+  width: max-content;
+  height: 100%;
+  color: white;
+  background-color: #444;
+}
