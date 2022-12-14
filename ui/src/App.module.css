@@ -17,8 +17,6 @@ html, body {
   font-weight: 500;
 }
 
-.built {
-  color: #ccc;
-  font-size: 13px;
-  text-align: center;
+.meta {
+  margin-top: -16px;
 }
