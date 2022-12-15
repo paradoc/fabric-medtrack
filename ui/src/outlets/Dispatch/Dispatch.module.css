@@ -1,0 +1,48 @@
+.container {
+  display: grid;
+  grid-template-rows: min-content max-content;
+  row-gap: 36px;
+}
+
+.container > header {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.form {
+  display: grid;
+  row-gap: 24px;
+  padding: 0 24px;
+}
+
+.inputField {
+  display: grid;
+  grid-template-columns: 100px 260px max-content;
+  column-gap: 12px;
+  align-items: center;
+}
+
+.inputField > input {
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid lightgray;
+}
+
+.inputField > label {
+  font-weight: bold;
+  color: #333;
+}
+
+.inputField > span {
+  font-size: 14px;
+  color: #eb455f;
+}
+
+.submit {
+  border: none;
+  height: 48px;
+  width: 200px;
+  font-weight: bold;
+  color: #555;
+  border-radius: 4px;
+}

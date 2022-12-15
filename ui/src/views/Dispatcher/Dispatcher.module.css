@@ -1,10 +1,72 @@
 .container {
   width: 100vw;
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 
 .container > aside {
-  width: max-content;
-  height: 100%;
+  width: 250px;
   color: white;
   background-color: #444;
+  display: grid;
+  grid-template-rows: 1fr min-content;
+  justify-items: center;
+  padding: 24px 0;
+}
+
+.container > aside > section {
+  width: 100%;
+  display: grid;
+}
+
+.meta {
+  grid-template-rows: min-content min-content;
+  row-gap: 48px;
+}
+
+.meta > div {
+  display: grid;
+}
+
+.user {
+  row-gap: 6px;
+  width: 100%;
+}
+
+.meta > div:last-of-type,
+.user > * {
+  padding: 0 24px;
+}
+
+.user > strong {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.user > span {
+  font-size: 16px;
+  font-weight: 100;
+}
+
+.buttons {
+  display: grid;
+  place-content: center;
+}
+
+.buttons > button {
+  width: 148px;
+  height: 48px;
+  color: white;
+  background: none;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.main {
+  padding: 24px 64px;
+  row-gap: 48px;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }

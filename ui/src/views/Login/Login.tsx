@@ -2,7 +2,6 @@ import React, {
   ChangeEventHandler,
   KeyboardEvent,
   useCallback,
-  useEffect,
   useRef,
   useState,
 } from 'react'
@@ -11,6 +10,7 @@ import { useSessionStorage } from 'usehooks-ts'
 import { compose, values, includes } from 'rambda'
 
 import styles from './Login.module.css'
+import Logo from '../../components/Logo'
 
 // In a real environment, this should be on backend.
 const _CREDENTIALS: { [key: string]: string } = {
@@ -54,7 +54,7 @@ export default function Login() {
   )
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
+    (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.nativeEvent.isComposing || e.key !== 'Enter') return
       submit()
     },
@@ -65,10 +65,7 @@ export default function Login() {
     <Navigate to="/dispatcher" replace={true} />
   ) : (
     <div className={styles.login}>
-      <div className={styles.logo}>
-        <strong>Mars</strong>
-        <span>Drugstore</span>
-      </div>
+      <Logo />
       <div className={styles.form}>
         <input
           type="text"

@@ -32,8 +32,9 @@ interface RxHistory {
   timestamps: string[]
 }
 
-interface Session {
+export interface Session {
   dispatch_id: string
+  dispatch_date: string
   history: RxHistory
   medications: Medication[]
 }
