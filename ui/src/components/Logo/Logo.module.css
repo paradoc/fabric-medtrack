@@ -1,0 +1,18 @@
+.logo {
+  display: grid;
+  place-items: center;
+  row-gap: 4px;
+}
+
+.logo > strong {
+  font-weight: bold;
+  font-size: 48px;
+}
+
+.logo > span {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #666;
+  text-transform: uppercase;
+}

@@ -1,0 +1,16 @@
+.container {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  row-gap: 36px;
+}
+
+.container > header {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.qr {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 36px;
+}

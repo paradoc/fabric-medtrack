@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import type { ManifestOptions, VitePWAOptions } from 'vite-plugin-pwa'
 import { VitePWA } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react'
@@ -20,7 +20,10 @@ const pwaOptions: Partial<VitePWAOptions> = {
   },
 }
 
-const replaceOptions = { __DATE__: dayjs().format('YYYY-MM-DD HH:mm:ssZ[Z]') }
+const replaceOptions = {
+  __DATE__: dayjs().format('YYYY-MM-DD HH:mm:ssZ[Z]'),
+  __DOMAIN__: loadEnv('', process.cwd()).VITE_NGROK_URL
+}
 const claims = process.env.CLAIMS === 'true'
 const reload = process.env.RELOAD_SW === 'true'
 const selfDestroying = process.env.SW_DESTROY === 'true'
@@ -43,6 +46,7 @@ if (reload) {
 
 if (selfDestroying)
   pwaOptions.selfDestroying = selfDestroying
+
 
 // https://vitejs.dev/config/
 export default defineConfig({

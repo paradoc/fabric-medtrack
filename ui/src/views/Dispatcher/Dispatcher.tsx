@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import { Navigate, Outlet } from 'react-router-dom'
 import dayjs from 'dayjs'
-import { Navigate } from 'react-router-dom'
 import { useSessionStorage } from 'usehooks-ts'
+
+import Logo from '../../components/Logo'
 
 import styles from './Dispatcher.module.css'
 
-const CurrentTime = () => {
+function CurrentTime() {
   const [time, setTime] = useState(dayjs().format('YYYY-MM-DD HH:mm:ss'))
 
   useEffect(() => {
     const id = setInterval(() => {
-      setTime(dayjs().format('YYYY-MM-DD HH:mm:ss'))
+      setTime(dayjs().format('MMM D, YYYY HH:mm:ss ddd'))
     }, 1000)
     return () => {
       clearInterval(id)
@@ -18,6 +20,14 @@ const CurrentTime = () => {
   }, [])
 
   return <div className={styles.time}>{time}</div>
+}
+
+function Feed() {
+  return (
+    <section className={styles.feed}>
+      <header>Feed</header>
+    </section>
+  )
 }
 
 export default function Dispatcher() {
@@ -39,6 +49,10 @@ export default function Dispatcher() {
           <button onClick={() => setIsLoggedIn(false)}>Logout</button>
         </section>
       </aside>
+      <main className={styles.main}>
+        <Logo />
+        <Outlet />
+      </main>
     </div>
   )
 }
