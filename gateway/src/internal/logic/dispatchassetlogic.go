@@ -30,22 +30,22 @@ func NewDispatchAssetLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Dis
 func (l *DispatchAssetLogic) DispatchAsset(req *types.DispatchRequest) (resp *types.DispatchResponse, err error) {
 	uuidObj, _ := uuid.NewUUID()
 	dispatchId := uuidObj.String()
-	createAsset(l.svcCtx.Gateway.Contract, req.Medications, dispatchId)
+	createAsset(l.svcCtx.Gateway.Contract, req.Medications, dispatchId, req.DispatchDate)
 	return &types.DispatchResponse{DispatchId: dispatchId}, nil
 }
 
 // Create a single asset.
-func createAsset(contract *client.Contract, medications []types.Medication, dispatchId string) error {
+func createAsset(contract *client.Contract, medications []types.Medication, dispatchId string, dispatchDate string) error {
 	fmt.Println("Submit Transaction: [CreateAsset]")
 	asset := types.Asset{
 		ReadResponse: types.ReadResponse{
-			DispatchId:  dispatchId,
-			Medications: medications,
+			DispatchDate: dispatchDate,
+			DispatchId:   dispatchId,
+			Medications:  medications,
 			History: types.History{
 				Timestamps: []string{},
 			},
 		},
-		UserId: "",
 	}
 	args, _ := json.Marshal(asset)
 	_, err := contract.SubmitTransaction("CreateAsset", string(args))
