@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strconv"
 	"time"
 
@@ -32,10 +33,10 @@ type Medication struct {
 // Insert struct field in alphabetic order => to achieve determinism across languages
 // golang keeps the order when marshal to json but doesn't order automatically
 type Asset struct {
-	DispatchID   string       `json:"dispatch_id"`
+	DispatchDate string       `json:"dispatch_date"`
+	DispatchId   string       `json:"dispatch_id"`
 	History      History      `json:"history"`
 	Medications  []Medication `json:"medications"`
-	DispatchDate string       `json:"dispatch_date"`
 }
 
 type AssetNotFoundError struct{}
@@ -58,7 +59,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 	assets := []Asset{
 		{
 			DispatchDate: "",
-			DispatchID:   "genesis-dispatch",
+			DispatchId:   "genesis-dispatch",
 			Medications: []Medication{
 				{
 					BrandName:   "",
@@ -81,7 +82,7 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 			return err
 		}
 
-		err = ctx.GetStub().PutState(asset.DispatchID, assetJSON)
+		err = ctx.GetStub().PutState(asset.DispatchId, assetJSON)
 		if err != nil {
 			return fmt.Errorf("failed to put to world state. %v", err)
 		}
@@ -92,12 +93,12 @@ func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) 
 
 // CreateAsset issues a new asset to the world state with given details.
 func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, asset Asset) error {
-	exists, err := s.AssetExists(ctx, asset.DispatchID)
+	exists, err := s.AssetExists(ctx, asset.DispatchId)
 	if err != nil {
 		return err
 	}
 	if exists {
-		return fmt.Errorf("the asset %s already exists", asset.DispatchID)
+		return fmt.Errorf("the asset %s already exists", asset.DispatchId)
 	}
 
 	assetJSON, err := json.Marshal(asset)
@@ -105,7 +106,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 		return err
 	}
 
-	return ctx.GetStub().PutState(asset.DispatchID, assetJSON)
+	return ctx.GetStub().PutState(asset.DispatchId, assetJSON)
 }
 
 // AssetExists returns true when asset with given ID exists in world state
@@ -138,7 +139,7 @@ func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, i
 }
 
 // GetAllAssets returns all assets found in world state
-func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface) ([]*Asset, error) {
+func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface, limit int) ([]*Asset, error) {
 	// range query with empty string for startKey and endKey does an
 	// open-ended query of all assets in the chaincode namespace.
 	resultsIterator, err := ctx.GetStub().GetStateByRange("", "")
@@ -162,7 +163,19 @@ func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 		assets = append(assets, &asset)
 	}
 
-	return assets, nil
+	// Sort by newest
+	sort.Slice(assets, func(i, j int) bool {
+		layout := "2006-01-02 15:04:05"
+		a, _ := time.Parse(layout, assets[i].DispatchDate)
+		b, _ := time.Parse(layout, assets[j].DispatchDate)
+		return a.After(b)
+	})
+
+	if limit >= len(assets) {
+		return assets, nil
+	} else {
+		return assets[:limit], nil
+	}
 }
 
 // AddHistory appends timestamps into the History.Timestamps array
@@ -182,7 +195,7 @@ func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, 
 
 	// overwriting original asset with new asset
 	asset := Asset{
-		DispatchID:   id,
+		DispatchId:   id,
 		DispatchDate: currentAsset.DispatchDate,
 		Medications:  currentAsset.Medications,
 	}

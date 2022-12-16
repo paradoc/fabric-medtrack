@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"gateway/src/internal/svc"
@@ -32,8 +33,8 @@ func (l *GetAssetLogic) GetAsset(req *types.ReadRequest) (resp *[]types.ReadResp
 	if req.Id == "" {
 		return l.GetAllAssets(req)
 	}
-	var responseData types.ReadResponse
 	assetData := getAsset(l.svcCtx.Gateway.Contract, req.Id)
+	var responseData types.ReadResponse
 	if err = json.Unmarshal(assetData, &responseData); err != nil {
 		return &[]types.ReadResponse{}, nil
 	}
@@ -42,7 +43,7 @@ func (l *GetAssetLogic) GetAsset(req *types.ReadRequest) (resp *[]types.ReadResp
 }
 
 func (l *GetAssetLogic) GetAllAssets(req *types.ReadRequest) (resp *[]types.ReadResponse, err error) {
-	assetData := getAllAssets(l.svcCtx.Gateway.Contract)
+	assetData := getAllAssets(l.svcCtx.Gateway.Contract, 0)
 	err = json.Unmarshal(assetData, resp)
 	if err != nil {
 		panic(fmt.Errorf("failed to marshal asset data: %w", err.Error()))
@@ -50,11 +51,20 @@ func (l *GetAssetLogic) GetAllAssets(req *types.ReadRequest) (resp *[]types.Read
 	return resp, err
 }
 
+func (l *GetAssetLogic) GetNewAssets(req *types.ReadRequest) (resp *[]types.ReadResponse, err error) {
+	assetData := getAllAssets(l.svcCtx.Gateway.Contract, req.Limit)
+	err = json.Unmarshal(assetData, &resp)
+	if err != nil {
+		panic(fmt.Errorf("failed to marshal asset data: %w", err.Error()))
+	}
+	return resp, err
+}
+
 // Get all assets from the ledger.
-func getAllAssets(contract *client.Contract) []byte {
+func getAllAssets(contract *client.Contract, limit int) []byte {
 	fmt.Println("Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger")
 
-	evaluateResult, err := contract.EvaluateTransaction("GetAllAssets")
+	evaluateResult, err := contract.EvaluateTransaction("GetAllAssets", strconv.Itoa(limit))
 	if err != nil {
 		panic(fmt.Errorf("failed to evaluate transaction: %w", err))
 	}

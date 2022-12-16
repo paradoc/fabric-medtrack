@@ -16,8 +16,6 @@ export default function Inspect() {
   const { id } = useParams()
   const { data, error } = useFetch<DispatchData[]>(`/api/read/${id}`)
 
-  console.log(data)
-
   return id && data && data.length > 0 && !error ? (
     <div className={styles.container}>
       <header>Dispatch Information</header>
