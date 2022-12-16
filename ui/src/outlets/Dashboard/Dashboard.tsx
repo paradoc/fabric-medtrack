@@ -11,7 +11,7 @@ function Feed() {
   const [feed, setFeed] = useState<DispatchData[]>([])
 
   const fetchData = useCallback(async () => {
-    const response = await fetch('/api/recent/7')
+    const response = await fetch('/api/recent/6')
     const data = await response.json()
     setFeed(data)
   }, [])
