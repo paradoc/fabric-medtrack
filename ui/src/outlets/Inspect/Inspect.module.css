@@ -1,7 +1,7 @@
 .container {
   display: grid;
-  grid-template-rows: min-content 1fr;
-  row-gap: 36px;
+  grid-template-rows: min-content max-content min-content;
+  row-gap: 24px;
 }
 
 .container > header {
@@ -9,8 +9,40 @@
   font-weight: bold;
 }
 
+.container > button {
+  width: 280px;
+  height: 48px;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+}
+
 .qr {
   display: grid;
-  grid-template-columns: max-content 1fr;
-  column-gap: 36px;
+  grid-template-rows: max-content max-content auto;
+  border: 1px solid lightgray;
+  width: fit-content;
+  height: fit-content;
+  place-content: center;
+  row-gap: 24px;
+  padding: 36px;
+  text-align: center;
+}
+
+.qr > header {
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.qr > span {
+  width: 300px;
+}
+
+.meta {
+  font-weight: 100;
+  display: grid;
+  row-gap: 6px;
+  font-size: 14px;
 }
