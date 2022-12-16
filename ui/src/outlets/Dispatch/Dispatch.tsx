@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router'
@@ -8,6 +9,7 @@ import styles from './Dispatch.module.css'
 
 type SerializedData = {
   medications: Medication[]
+  dispatch_date: string
 }
 
 type DispatchFormData = {
@@ -37,6 +39,7 @@ export default function Dispatch() {
             frequency: `PT${frequency}H`,
           },
         ],
+        dispatch_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       }
       const response = await fetch('/api/dispatch', {
         method: 'POST',

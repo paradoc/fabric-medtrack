@@ -3,7 +3,6 @@ package types
 
 type Asset struct {
 	ReadResponse
-	UserId      string       `json:"user_id"`
 }
 
 type History struct {
@@ -20,7 +19,8 @@ type Medication struct {
 }
 
 type DispatchRequest struct {
-	Medications []Medication `json:"medications"`
+	DispatchDate string       `json:"dispatch_date"`
+	Medications  []Medication `json:"medications"`
 }
 
 type DispatchResponse struct {
@@ -41,8 +41,9 @@ type ReadRequest struct {
 }
 
 type ReadResponse struct {
-	DispatchId  string       `json:"dispatch_id"`
-	History     History      `json:"history"`
+	DispatchDate string      `json:"dispatch_date"`
+	DispatchId   string      `json:"dispatch_id"`
+	History      History     `json:"history"`
 	Medications []Medication `json:"medications"`
 }
 

@@ -32,10 +32,10 @@ type Medication struct {
 // Insert struct field in alphabetic order => to achieve determinism across languages
 // golang keeps the order when marshal to json but doesn't order automatically
 type Asset struct {
-	DispatchID  string       `json:"dispatch_id"`
-	History     History      `json:"history"`
-	Medications []Medication `json:"medications"`
-	UserID      string       `json:"user_id"`
+	DispatchID   string       `json:"dispatch_id"`
+	History      History      `json:"history"`
+	Medications  []Medication `json:"medications"`
+	DispatchDate string       `json:"dispatch_date"`
 }
 
 type AssetNotFoundError struct{}
@@ -57,8 +57,8 @@ func allTrue(b []bool) bool {
 func (s *SmartContract) InitLedger(ctx contractapi.TransactionContextInterface) error {
 	assets := []Asset{
 		{
-			UserID:     "genesis-user",
-			DispatchID: "genesis-dispatch",
+			DispatchDate: "",
+			DispatchID:   "genesis-dispatch",
 			Medications: []Medication{
 				{
 					BrandName:   "",
@@ -182,9 +182,9 @@ func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, 
 
 	// overwriting original asset with new asset
 	asset := Asset{
-		DispatchID:  id,
-		UserID:      currentAsset.UserID,
-		Medications: currentAsset.Medications,
+		DispatchID:   id,
+		DispatchDate: currentAsset.DispatchDate,
+		Medications:  currentAsset.Medications,
 	}
 
 	limitTsLen := currentAsset.Medications[0].EndAfterN

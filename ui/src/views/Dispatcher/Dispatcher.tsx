@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Link, Navigate, Outlet } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { useSessionStorage } from 'usehooks-ts'
 
@@ -22,14 +22,6 @@ function CurrentTime() {
   return <div className={styles.time}>{time}</div>
 }
 
-function Feed() {
-  return (
-    <section className={styles.feed}>
-      <header>Feed</header>
-    </section>
-  )
-}
-
 export default function Dispatcher() {
   const [isLoggedIn, setIsLoggedIn] = useSessionStorage('login', false)
 
@@ -50,7 +42,12 @@ export default function Dispatcher() {
         </section>
       </aside>
       <main className={styles.main}>
-        <Logo />
+        <Link
+          to="/dispatcher"
+          style={{ textDecoration: 'none', color: '#333' }}
+        >
+          <Logo />
+        </Link>
         <Outlet />
       </main>
     </div>
