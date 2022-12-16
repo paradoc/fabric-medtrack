@@ -37,14 +37,15 @@ type QueryResponse struct {
 }
 
 type ReadRequest struct {
-	Id string `path:"id,optional"`
+	Id    string `path:"id,optional"`
+	Limit int    `path:"lim,optional"`
 }
 
 type ReadResponse struct {
-	DispatchDate string      `json:"dispatch_date"`
-	DispatchId   string      `json:"dispatch_id"`
-	History      History     `json:"history"`
-	Medications []Medication `json:"medications"`
+	DispatchDate string       `json:"dispatch_date"`
+	DispatchId   string       `json:"dispatch_id"`
+	History      History      `json:"history"`
+	Medications  []Medication `json:"medications"`
 }
 
 type UpdateRequest struct {

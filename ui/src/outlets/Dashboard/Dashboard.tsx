@@ -1,58 +1,41 @@
-import React from 'react'
-import dayjs from 'dayjs'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { prop } from 'rambda'
+
+import { DispatchData } from '../../views/Collector'
 
 import styles from './Dashboard.module.css'
 
 function Feed() {
   // TODO: Get latest N dispatches from backend
-  const tmpFeeds = [
-    {
-      time: dayjs().format('HH:mm:ss'),
-      medications: ['hello', 'world'],
-      id: '123',
-    },
-    {
-      time: dayjs().subtract(1, 'hour').format('HH:mm:ss'),
-      medications: ['hello', 'world'],
-      id: '1223',
-    },
-    {
-      time: dayjs().subtract(2, 'hour').format('HH:mm:ss'),
-      medications: ['hello', 'world'],
-      id: '1253',
-    },
-    {
-      time: dayjs().subtract(3, 'hour').format('HH:mm:ss'),
-      medications: ['hello', 'world'],
-      id: '1523',
-    },
-    {
-      time: dayjs().subtract(4, 'hour').format('HH:mm:ss'),
-      medications: ['hello', 'world'],
-      id: '1623',
-    },
-    {
-      time: dayjs().subtract(5, 'hour').format('HH:mm:ss'),
-      medications: ['hello', 'world'],
-      id: '1233',
-    },
-    {
-      time: dayjs().subtract(6, 'hour').format('HH:mm:ss'),
-      medications: ['hello', 'world'],
-      id: '12433',
-    },
-  ]
+  const [feed, setFeed] = useState<DispatchData[]>([])
+
+  const fetchData = useCallback(async () => {
+    const response = await fetch('/api/recent/7')
+    const data = await response.json()
+    setFeed(data)
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(fetchData, 2000)
+    return () => {
+      clearInterval(id)
+    }
+  }, [])
 
   return (
     <section className={styles.feed}>
       <header>Dispatch Feed</header>
       <div className={styles.feedList}>
-        {tmpFeeds.map(({ id, time, medications }) => (
-          <div className={styles.feedItem} key={id}>
-            <span className={styles.time}>{time}</span>
-            <span className={styles.meds}>{medications.join(', ')}</span>
-            <span className={styles.dispatchId}>ID: {id}</span>
+        {feed.map(({ dispatch_id, dispatch_date, medications }) => (
+          <div className={styles.feedItem} key={dispatch_id}>
+            <span className={styles.time}>{dispatch_date}</span>
+            <span className={styles.meds}>
+              {medications.map(prop('generic_name')).join(', ')}
+            </span>
+            <Link to={`./inspect/${dispatch_id}`} relative="path">
+              <span className={styles.dispatchId}>{dispatch_id}</span>
+            </Link>
           </div>
         ))}
       </div>
@@ -67,9 +50,18 @@ export default function Dashboard() {
         <Link to="/dispatcher/new">
           <button className={styles.control}>dispatch</button>
         </Link>
-        <button className={styles.control}>inspect</button>
+
         {/** We don't have a plan to implement this for now. */}
-        <button className={styles.control}>history</button>
+        <button className={styles.control}>
+          inspect
+          <br />
+          (non-functional)
+        </button>
+        <button className={styles.control}>
+          history
+          <br />
+          (non-functional)
+        </button>
       </section>
       <Feed />
     </div>

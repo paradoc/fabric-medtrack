@@ -42,6 +42,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/read/:id",
 				Handler: GetAssetHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/recent",
+				Handler: GetNewAssetsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/recent/:lim",
+				Handler: GetNewAssetsHandler(serverCtx),
+			},
 		},
 	)
 
