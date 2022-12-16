@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/hyperledger/fabric-chaincode-go/shim"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
@@ -178,6 +179,57 @@ func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 	}
 }
 
+// Example: Parameterized rich query
+func (s *SmartContract) QueryAssets(ctx contractapi.TransactionContextInterface, generic string, start string, end string) ([]*Asset, error) {
+	// queryString := fmt.Sprintf(`{"selector":{"medications": { "$elemMatch": {"generic_name": { "$eq": "%s" }} }}}`, generic)
+	queryString := fmt.Sprintf(`
+		{
+			"selector": {
+				"$and": [
+					{ "medications": { "$elemMatch": { "generic_name": { "$eq": "%s" } } } },
+					{ "dispatch_date": { "$gte": "%s" } },
+					{ "dispatch_date": { "$lte": "%s" } }
+				]
+			}
+		}`,
+		generic,
+		start,
+		end,
+	)
+	return getQueryResultForQueryString(ctx, queryString)
+}
+
+// getQueryResultForQueryString executes the passed in query string.
+// The result set is built and returned as a byte array containing the JSON results.
+func getQueryResultForQueryString(ctx contractapi.TransactionContextInterface, queryString string) ([]*Asset, error) {
+	resultsIterator, err := ctx.GetStub().GetQueryResult(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer resultsIterator.Close()
+
+	return constructQueryResponseFromIterator(resultsIterator)
+}
+
+// constructQueryResponseFromIterator constructs a slice of assets from the resultsIterator
+func constructQueryResponseFromIterator(resultsIterator shim.StateQueryIteratorInterface) ([]*Asset, error) {
+	var assets []*Asset
+	for resultsIterator.HasNext() {
+		queryResult, err := resultsIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+		var asset Asset
+		err = json.Unmarshal(queryResult.Value, &asset)
+		if err != nil {
+			return nil, err
+		}
+		assets = append(assets, &asset)
+	}
+
+	return assets, nil
+}
+
 // AddHistory appends timestamps into the History.Timestamps array
 func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, id string, timestamps []string) error {
 	exists, err := s.AssetExists(ctx, id)
@@ -221,10 +273,16 @@ func (s *SmartContract) AddHistory(ctx contractapi.TransactionContextInterface, 
 		if len(timestamps) > limitTsLen {
 			sanitizedTs = timestamps[:limitTsLen]
 		}
+		var ended = ""
+		for _, medication := range asset.Medications {
+			if medication.EndAfterN == 1 {
+				ended = timestamps[0]
+			}
+		}
 
 		asset.History = History{
 			StartedAt:  timestamps[0],
-			EndedAt:    "",
+			EndedAt:    ended,
 			Timestamps: sanitizedTs,
 		}
 	}

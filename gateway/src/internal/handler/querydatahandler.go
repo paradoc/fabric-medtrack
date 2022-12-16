@@ -19,7 +19,7 @@ func QueryDataHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := logic.NewQueryDataLogic(r.Context(), svcCtx)
-		resp, err := l.QueryData(&req)
+		resp, err := l.QueryCompliance(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

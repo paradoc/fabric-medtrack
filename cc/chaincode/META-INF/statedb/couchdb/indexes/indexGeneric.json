@@ -1,0 +1,10 @@
+{
+  "index": {
+    "fields": [
+      "medications.[].generic_name"
+    ]
+  },
+  "ddoc": "indexGenericDoc",
+  "name": "indexGeneric",
+  "type": "json"
+}

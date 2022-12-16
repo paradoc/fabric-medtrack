@@ -3,7 +3,9 @@ module gateway
 go 1.19
 
 require (
+	github.com/google/uuid v1.3.0
 	github.com/hyperledger/fabric-gateway v1.1.1
+	github.com/senseyeio/duration v0.0.0-20180430131211-7c2a214ada46
 	github.com/zeromicro/go-zero v1.4.2
 	google.golang.org/grpc v1.50.1
 )
@@ -17,7 +19,6 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.13.0 // indirect
 	github.com/hyperledger/fabric-protos-go-apiv2 v0.0.0-20220615102044-467be1c7b2e7 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
