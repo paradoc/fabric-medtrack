@@ -7,7 +7,6 @@ import { DispatchData } from '../../views/Collector'
 import styles from './Dashboard.module.css'
 
 function Feed() {
-  // TODO: Get latest N dispatches from backend
   const [feed, setFeed] = useState<DispatchData[]>([])
 
   const fetchData = useCallback(async () => {
