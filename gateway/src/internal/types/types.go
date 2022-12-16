@@ -28,12 +28,20 @@ type DispatchResponse struct {
 }
 
 type QueryRequest struct {
-	GenericName string   `path:"gn"`
-	Timestamps  []string `path:"ts"`
+	Generic string `form:"generic"`
+	Start   string `form:"start"`
+	End     string `form:"end"`
 }
 
 type QueryResponse struct {
-	ComplianceRate float64 `json:"compliance_rate"`
+	*ReadResponse
+}
+
+type QueryComplianceResponse struct {
+	Current         int    `json:"current"`
+	Expected        int    `json:"expected"`
+	Generic         string `json:"generic_name"`
+	TotalDispatches int    `json:"total_dispatches"`
 }
 
 type ReadRequest struct {
