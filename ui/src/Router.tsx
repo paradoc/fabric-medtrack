@@ -8,6 +8,8 @@ import Dispatcher from './views/Dispatcher'
 import Dispatch from './outlets/Dispatch'
 import Inspect from './outlets/Inspect'
 import Login from './views/Login'
+import Query from './outlets/Query'
+import Visualize from './outlets/Visualize'
 import Watcher from './views/Watcher'
 
 export default function Router() {
@@ -23,7 +25,11 @@ export default function Router() {
             <Route path="inspect/:id" element={<Inspect />} />
             <Route path="*" element={<>404</>} />
           </Route>
-          <Route path="watcher" element={<Watcher />} />
+          <Route path="watcher" element={<Watcher />}>
+            <Route index element={<Query />} />
+            <Route path="visualize" element={<Visualize />} />
+            <Route path="*" element={<>404</>} />
+          </Route>
           <Route path="login" element={<Login />} />
           <Route path="*" element={<>404</>} />
         </Route>

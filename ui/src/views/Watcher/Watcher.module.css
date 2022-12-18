@@ -1,0 +1,16 @@
+.container {
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content max-content;
+}
+
+.container > header {
+  font-weight: bold;
+  font-size: 48px;
+  padding: 36px;
+}
+
+.outlet {
+  padding: 0 36px;
+}
