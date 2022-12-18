@@ -4,19 +4,23 @@ This subfolder contains the network setup and configuration needed to create the
 
 The test network is configured to run on k3s provided by Rancher.
 
+This is a fork of https://github.com/hyperledger/fabric-samples/tree/main/test-network-k8s but updated for Apple M2 processor.
+
 ## Disclaimer
 
 This subfolder is tailored to work on Apple's M2 processor, which might need to be reconfigured for other machines.
 
+See https://jira.hyperledger.org/browse/FAB-18389 for more details.
+
 ## Quickstart
 
-Create a cluster
+### Create a cluster
 
 ```bash
 ./network cluster init
 ```
 
-Launch the network and create a channel
+### Launch the network and create a channel
 
 ```bash
 ./network up
@@ -24,13 +28,15 @@ Launch the network and create a channel
 ./network channel create
 ```
 
-Deploy the smart contract
+### Deploy the smart contract.
 
 ```bash
-./network chaincode deploy chaincode_name ../cc
+./network chaincode deploy <chaincode-name> ../cc <sequence-number>
 ```
 
-Shutdown the network and tear down the cluster
+Where `chaincode-name` is a string and `sequence-number` is an integer incremented on every chaincode install.
+
+### Shutdown the network and tear down the cluster
 
 ```bash
 ./network down
