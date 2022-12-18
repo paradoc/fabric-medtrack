@@ -33,9 +33,15 @@ cd ui && pnpm start
 
 ## Run the UI and tunnel using [ngrok](https://ngrok.com/)
 
-1. Modify `./ui/.env` and update the value of `VITE_NGROK_URL`
+1. Start the tunnel and copy the URL
 
-2. Start with SSL
+```bash
+ngrok http https://localhost:4173/
+```
+
+2. Modify `./ui/.env` and update the value of `VITE_NGROK_URL`
+
+3. Start the UI with SSL
 
 ```bash
 cd ui && pnpm start
