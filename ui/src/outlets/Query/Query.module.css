@@ -4,20 +4,9 @@
   row-gap: 36px;
 }
 
-.container > header {
-  font-weight: bold;
-  font-size: 24px;
-}
-
-.form {
-  display: grid;
-  row-gap: 24px;
-  padding: 0 24px;
-}
-
 .inputField {
   display: grid;
-  grid-template-columns: 64px 260px max-content;
+  grid-template-columns: 100px 260px max-content;
   column-gap: 12px;
   align-items: center;
 }
