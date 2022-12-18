@@ -2,7 +2,7 @@
 
 This is the gateway for communication between the UI and the blockchain network.
 
-Folder structure and templates were built using github.com/zeromicro/go-zero.
+Folder structure and templates were built using [github.com/zeromicro/go-zero](https://github.com/zeromicro/go-zero).
 
 Default config file is located in `./src/etc/gateway.yaml`
 
