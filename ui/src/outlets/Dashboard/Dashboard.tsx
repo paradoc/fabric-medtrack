@@ -8,10 +8,12 @@ import styles from './Dashboard.module.css'
 
 function Feed() {
   const [feed, setFeed] = useState<DispatchData[]>([])
+  const [hasFetched, setHasFetched] = useState(false)
 
   const fetchData = useCallback(async () => {
     const response = await fetch('/api/recent/6')
     const data = await response.json()
+    setHasFetched(true)
     setFeed(data)
   }, [])
 
@@ -26,6 +28,7 @@ function Feed() {
     <section className={styles.feed}>
       <header>Dispatch Feed</header>
       <div className={styles.feedList}>
+        {!hasFetched && <>loading</>}
         {feed.map(({ dispatch_id, dispatch_date, medications }) => (
           <div className={styles.feedItem} key={dispatch_id}>
             <span className={styles.time}>{dispatch_date}</span>
