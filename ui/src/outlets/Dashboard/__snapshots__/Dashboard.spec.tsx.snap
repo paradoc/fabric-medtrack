@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard should match snapshot 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <section
+      class="controls"
+    >
+      <a
+        href="/dispatcher/new"
+      >
+        <button
+          class="control"
+        >
+          dispatch
+        </button>
+      </a>
+      <button
+        class="control"
+      >
+        inspect
+        <br />
+        (non-functional)
+      </button>
+      <button
+        class="control"
+      >
+        history
+        <br />
+        (non-functional)
+      </button>
+    </section>
+    <section
+      class="feed"
+    >
+      <header>
+        Dispatch Feed
+      </header>
+      <div
+        class="feedList"
+        data-testid="feeds"
+      >
+        <div
+          class="feedItem"
+        >
+          <span
+            class="time"
+          />
+          <span
+            class="meds"
+          >
+            test-generic
+          </span>
+          <a
+            href="/inspect/test-dispatch-id"
+          >
+            <span
+              class="dispatchId"
+            >
+              test-dispatch-id
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+`;

@@ -6,7 +6,6 @@ import { useRegisterSW } from 'virtual:pwa-register/react'
 export default function ReloadPrompt() {
   // replaced dynamically
   const buildDate = '__DATE__'
-  // replaced dyanmicaly
   const reloadSW = '__RELOAD_SW__'
 
   const {

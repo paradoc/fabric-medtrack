@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ListItem should match the snapshot and confirm the click button behavior 1`] = `
+<div>
+  <div
+    class="listItem"
+  >
+    <input
+      data-testid="checkbox"
+      id="test-generic-test-brand"
+      type="checkbox"
+    />
+    <label
+      for="test-generic-test-brand"
+    >
+      <strong>
+        test-generic
+      </strong>
+       
+      <span>
+        test-brand
+      </span>
+    </label>
+  </div>
+</div>
+`;

@@ -75,6 +75,7 @@ export default function Login() {
           alt="username"
           className={loginError ? styles['-error'] : ''}
           onKeyDown={handleKeyDown}
+          data-testid="user"
         />
         <input
           type="password"
@@ -83,10 +84,12 @@ export default function Login() {
           alt="password"
           className={loginError ? styles['-error'] : ''}
           onKeyDown={handleKeyDown}
+          data-testid="pass"
         />
         <button
           disabled={compose(includes(false), values)(formState)}
           onClick={submit}
+          data-testid="submit"
         >
           Login
         </button>

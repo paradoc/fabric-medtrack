@@ -7,7 +7,7 @@ export interface CollectorState {
   triggerSync: string | undefined
 }
 
-const initialState: CollectorState = {
+export const initialState: CollectorState = {
   triggerSync: undefined
 }
 

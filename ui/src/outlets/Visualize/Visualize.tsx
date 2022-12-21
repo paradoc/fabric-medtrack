@@ -60,7 +60,10 @@ export default function Visualize() {
         {visData.map(prop('generic_name')).join(', ')} from {start} to {end}
       </header>
       {visData.length > 0 && (
-        <div style={{ height: '100%', width: '100%', flex: 1 }}>
+        <div
+          style={{ height: '100%', width: '100%', flex: 1 }}
+          data-testid="chart"
+        >
           <ResponsiveContainer height="100%" width="100%">
             <BarChart
               width={640}

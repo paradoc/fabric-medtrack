@@ -35,6 +35,7 @@ export default function Query() {
           type="text"
           {...register('generic', { required: true })}
           placeholder="comma delimited (ie. med1,med2)"
+          data-testid="generic"
         />
         <span>{errors.generic && '* required'}</span>
       </div>
@@ -45,17 +46,28 @@ export default function Query() {
           id="start"
           type="date"
           {...register('start', { required: true })}
+          data-testid="start"
         />
         <span>{errors.start && '* required'}</span>
       </div>
 
       <div className={styles.inputField}>
         <label htmlFor="end">End</label>
-        <input id="end" type="date" {...register('end', { required: true })} />
+        <input
+          id="end"
+          type="date"
+          {...register('end', { required: true })}
+          data-testid="end"
+        />
         <span>{errors.end && '* required'}</span>
       </div>
 
-      <input type="submit" className={styles.submit} value="Query" />
+      <input
+        type="submit"
+        className={styles.submit}
+        value="Query"
+        data-testid="submit"
+      />
     </form>
   )
 }

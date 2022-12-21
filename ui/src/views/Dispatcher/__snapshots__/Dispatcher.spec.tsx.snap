@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dispatcher should match snapshot 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <aside>
+      <section
+        class="meta"
+      >
+        <div
+          class="user"
+        >
+          <strong>
+            Mark C.
+          </strong>
+          <span>
+            RPh
+          </span>
+        </div>
+        <div
+          class="time"
+        >
+          2022-12-01 09:00:00
+        </div>
+      </section>
+      <section
+        class="buttons"
+      >
+        <button
+          data-testid="logout"
+        >
+          Logout
+        </button>
+      </section>
+    </aside>
+    <main
+      class="main"
+    >
+      <a
+        href="/dispatcher"
+        style="text-decoration: none; color: rgb(51, 51, 51);"
+      >
+        <div
+          class="logo"
+        >
+          <strong>
+            Mars
+          </strong>
+          <span>
+            Drugstore
+          </span>
+        </div>
+      </a>
+    </main>
+  </div>
+</div>
+`;

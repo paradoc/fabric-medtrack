@@ -38,7 +38,9 @@ export default function Dispatcher() {
           <CurrentTime />
         </section>
         <section className={styles.buttons}>
-          <button onClick={() => setIsLoggedIn(false)}>Logout</button>
+          <button onClick={() => setIsLoggedIn(false)} data-testid="logout">
+            Logout
+          </button>
         </section>
       </aside>
       <main className={styles.main}>

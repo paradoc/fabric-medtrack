@@ -30,6 +30,7 @@ export default function ListItem({
         id={id}
         onChange={(e) => onClick(e.currentTarget.checked)}
         ref={ref}
+        data-testid="checkbox"
       />
       <label htmlFor={id}>
         <strong>{generic_name}</strong> <span>{brand_name}</span>

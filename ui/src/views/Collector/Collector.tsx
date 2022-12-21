@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 import { useLocation } from 'react-router-dom'
@@ -234,7 +233,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
                   </div>
                 )
               )}
-              <div className={styles.list}>
+              <div className={styles.list} data-testid="medications">
                 {currData.medications.map(
                   (medication: Medication, i: number) => (
                     <ListItem
@@ -250,6 +249,7 @@ function Data({ rx, children, onError }: PropsWithChildren<DataProps>) {
                 onClick={submit}
                 disabled={!(toggleCount === currData?.medications.length ?? 0)}
                 className={styles.submit}
+                data-testid="submit"
               >
                 OK
               </button>

@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collector should match snapshot 1`] = `
+<div>
+  <div
+    class="collector"
+  >
+    <div
+      class="container"
+    >
+      <header>
+        <span>
+          Hi there!
+        </span>
+        <img
+          alt="refresh"
+          class="refresh"
+          src="[object Object]"
+        />
+      </header>
+      <div
+        class="content "
+      >
+        <div
+          class="completed"
+        >
+          <strong>
+            Thank you for your compliance!
+          </strong>
+          <span>
+            Please go online to sync your data.
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
