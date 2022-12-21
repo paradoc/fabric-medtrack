@@ -5,12 +5,17 @@
   grid-template-rows: min-content max-content;
 }
 
-.container > header {
+.outlet {
+  padding: 0 36px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.link > header {
+  color: #333;
   font-weight: bold;
   font-size: 48px;
   padding: 36px;
-}
-
-.outlet {
-  padding: 0 36px;
 }

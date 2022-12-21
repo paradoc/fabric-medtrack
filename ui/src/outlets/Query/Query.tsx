@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router'
@@ -20,8 +21,12 @@ export default function Query() {
   } = useForm<QueryFormData>()
 
   const onSubmit = handleSubmit(async ({ generic, start, end }) => {
-    setQuery(`./query?g=${generic}&s=${start}&e=${end}`)
-    reset()
+    if (dayjs(start).isAfter(dayjs(end))) {
+      alert('Invalid date range: start date is after end date')
+    } else {
+      setQuery(`./visualize?g=${generic}&s=${start}&e=${end}`)
+      reset()
+    }
   })
 
   return query ? (
