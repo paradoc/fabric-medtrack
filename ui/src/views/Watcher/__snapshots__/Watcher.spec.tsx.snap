@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Watcher should match snapshot 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <header>
+      RxWatch
+    </header>
+    <div
+      class="outlet"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Query should check behaviors 1`] = `
+<div>
+  <form
+    class="container"
+  >
+    <div
+      class="inputField"
+    >
+      <label
+        for="generic"
+      >
+        Generic
+      </label>
+      <input
+        data-testid="generic"
+        id="generic"
+        name="generic"
+        placeholder="comma delimited (ie. med1,med2)"
+        type="text"
+      />
+      <span />
+    </div>
+    <div
+      class="inputField"
+    >
+      <label
+        for="start"
+      >
+        Start
+      </label>
+      <input
+        data-testid="start"
+        id="start"
+        name="start"
+        type="date"
+      />
+      <span />
+    </div>
+    <div
+      class="inputField"
+    >
+      <label
+        for="end"
+      >
+        End
+      </label>
+      <input
+        data-testid="end"
+        id="end"
+        name="end"
+        type="date"
+      />
+      <span />
+    </div>
+    <input
+      class="submit"
+      data-testid="submit"
+      type="submit"
+      value="Query"
+    />
+  </form>
+</div>
+`;
+
+exports[`Query should match snapshot 1`] = `
+<div>
+  <form
+    class="container"
+  >
+    <div
+      class="inputField"
+    >
+      <label
+        for="generic"
+      >
+        Generic
+      </label>
+      <input
+        data-testid="generic"
+        id="generic"
+        name="generic"
+        placeholder="comma delimited (ie. med1,med2)"
+        type="text"
+      />
+      <span />
+    </div>
+    <div
+      class="inputField"
+    >
+      <label
+        for="start"
+      >
+        Start
+      </label>
+      <input
+        data-testid="start"
+        id="start"
+        name="start"
+        type="date"
+      />
+      <span />
+    </div>
+    <div
+      class="inputField"
+    >
+      <label
+        for="end"
+      >
+        End
+      </label>
+      <input
+        data-testid="end"
+        id="end"
+        name="end"
+        type="date"
+      />
+      <span />
+    </div>
+    <input
+      class="submit"
+      data-testid="submit"
+      type="submit"
+      value="Query"
+    />
+  </form>
+</div>
+`;

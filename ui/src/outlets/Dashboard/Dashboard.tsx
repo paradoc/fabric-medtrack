@@ -27,7 +27,7 @@ function Feed() {
   return (
     <section className={styles.feed}>
       <header>Dispatch Feed</header>
-      <div className={styles.feedList}>
+      <div className={styles.feedList} data-testid="feeds">
         {!hasFetched && <>loading</>}
         {feed.map(({ dispatch_id, dispatch_date, medications }) => (
           <div className={styles.feedItem} key={dispatch_id}>

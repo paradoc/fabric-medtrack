@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collector should match snapshot 1`] = `
+<div>
+  <div
+    class="collector"
+  >
+    <div
+      class="container"
+    >
+      <header>
+        <span>
+          Hi there!
+        </span>
+        <img
+          alt="refresh"
+          class="refresh"
+          src="[object Object]"
+        />
+      </header>
+    </div>
+    <div
+      class="qrScanner"
+    >
+      Please scan your QR code
+      <section
+        class="scanner"
+      >
+        <div
+          style="width: 100%; padding-top: 100%; overflow: hidden; position: relative;"
+        >
+          <video
+            id="video"
+            style="top: 0px; left: 0px; width: 100%; height: 100%; display: block; overflow: hidden; position: absolute;"
+          />
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+`;

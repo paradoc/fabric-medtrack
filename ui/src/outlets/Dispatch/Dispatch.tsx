@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router'
 
@@ -65,13 +65,18 @@ export default function Dispatch() {
             id="generic"
             type="text"
             {...register('generic', { required: true })}
+            data-testid="generic"
           />
           <span>{errors.generic && '* required'}</span>
         </div>
 
         <div className={styles.inputField}>
           <label htmlFor="brand">Brand</label>
-          <input id="brand" {...register('brand', { required: true })} />
+          <input
+            id="brand"
+            {...register('brand', { required: true })}
+            data-testid="brand"
+          />
           <span>{errors.brand && '* required'}</span>
         </div>
 
@@ -82,6 +87,7 @@ export default function Dispatch() {
             id="frequency"
             {...register('frequency', { required: true, min: 1, max: 72 })}
             placeholder="in hours"
+            data-testid="frequency"
           />
           <span>{errors.frequency && '* required'}</span>
         </div>
@@ -92,11 +98,17 @@ export default function Dispatch() {
             type="number"
             id="count"
             {...register('count', { required: true, min: 1 })}
+            data-testid="count"
           />
           <span>{errors.count && '* required'}</span>
         </div>
 
-        <input type="submit" className={styles.submit} value="Dispatch" />
+        <input
+          type="submit"
+          className={styles.submit}
+          value="Dispatch"
+          data-testid="submit"
+        />
       </form>
     </div>
   )

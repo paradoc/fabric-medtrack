@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collector should match snapshot 1`] = `
+<div>
+  <div
+    class="collector"
+  >
+    <div
+      class="container"
+    >
+      <header>
+        <span>
+          Hi there!
+        </span>
+        <img
+          alt="refresh"
+          class="refresh"
+          src="[object Object]"
+        />
+      </header>
+      <div
+        class="content -three-layer"
+      >
+        <div
+          class="reminder"
+        >
+          <strong>
+            Did you miss your medications?
+          </strong>
+          <span>
+            Please tap on the medications below and press OK if you have taken it already.
+          </span>
+        </div>
+        <div
+          class="list"
+          data-testid="medications"
+        >
+          <div
+            class="listItem"
+          >
+            <input
+              data-testid="checkbox"
+              id="test-generic-test_brand"
+              type="checkbox"
+            />
+            <label
+              for="test-generic-test_brand"
+            >
+              <strong>
+                test-generic
+              </strong>
+               
+              <span>
+                test_brand
+              </span>
+            </label>
+          </div>
+        </div>
+        <button
+          class="submit"
+          data-testid="submit"
+          disabled=""
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

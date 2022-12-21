@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login should check behavior 1`] = `
+<div>
+  <div
+    class="login"
+  >
+    <div
+      class="logo"
+    >
+      <strong>
+        Mars
+      </strong>
+      <span>
+        Drugstore
+      </span>
+    </div>
+    <div
+      class="form"
+    >
+      <input
+        alt="username"
+        class="-error"
+        data-testid="user"
+        placeholder="username"
+        type="text"
+      />
+      <input
+        alt="password"
+        class="-error"
+        data-testid="pass"
+        type="password"
+      />
+      <button
+        data-testid="submit"
+      >
+        Login
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Login should check behavior: ok 1`] = `
+<div>
+  dispatcher
+</div>
+`;
+
+exports[`Login should match snapshot 1`] = `
+<div>
+  <div
+    class="login"
+  >
+    <div
+      class="logo"
+    >
+      <strong>
+        Mars
+      </strong>
+      <span>
+        Drugstore
+      </span>
+    </div>
+    <div
+      class="form"
+    >
+      <input
+        alt="username"
+        class=""
+        data-testid="user"
+        placeholder="username"
+        type="text"
+      />
+      <input
+        alt="password"
+        class=""
+        data-testid="pass"
+        type="password"
+      />
+      <button
+        data-testid="submit"
+        disabled=""
+      >
+        Login
+      </button>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Logo should match snapshot 1`] = `
+<div>
+  <div
+    class="logo"
+  >
+    <strong>
+      Mars
+    </strong>
+    <span>
+      Drugstore
+    </span>
+  </div>
+</div>
+`;

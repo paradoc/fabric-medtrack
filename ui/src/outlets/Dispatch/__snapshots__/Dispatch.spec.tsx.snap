@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dispatch should check click behavior 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <header>
+      Dispatch
+    </header>
+    <form
+      class="form"
+    >
+      <div
+        class="inputField"
+      >
+        <label
+          for="generic"
+        >
+          Generic
+        </label>
+        <input
+          data-testid="generic"
+          id="generic"
+          name="generic"
+          type="text"
+        />
+        <span />
+      </div>
+      <div
+        class="inputField"
+      >
+        <label
+          for="brand"
+        >
+          Brand
+        </label>
+        <input
+          data-testid="brand"
+          id="brand"
+          name="brand"
+        />
+        <span />
+      </div>
+      <div
+        class="inputField"
+      >
+        <label
+          for="frequency"
+        >
+          Frequency
+        </label>
+        <input
+          data-testid="frequency"
+          id="frequency"
+          name="frequency"
+          placeholder="in hours"
+          type="number"
+        />
+        <span />
+      </div>
+      <div
+        class="inputField"
+      >
+        <label
+          for="count"
+        >
+          Count
+        </label>
+        <input
+          data-testid="count"
+          id="count"
+          name="count"
+          type="number"
+        />
+        <span />
+      </div>
+      <input
+        class="submit"
+        data-testid="submit"
+        type="submit"
+        value="Dispatch"
+      />
+    </form>
+  </div>
+</div>
+`;
+
+exports[`Dispatch should match snapshot 1`] = `
+<div>
+  <div
+    class="container"
+  >
+    <header>
+      Dispatch
+    </header>
+    <form
+      class="form"
+    >
+      <div
+        class="inputField"
+      >
+        <label
+          for="generic"
+        >
+          Generic
+        </label>
+        <input
+          data-testid="generic"
+          id="generic"
+          name="generic"
+          type="text"
+        />
+        <span />
+      </div>
+      <div
+        class="inputField"
+      >
+        <label
+          for="brand"
+        >
+          Brand
+        </label>
+        <input
+          data-testid="brand"
+          id="brand"
+          name="brand"
+        />
+        <span />
+      </div>
+      <div
+        class="inputField"
+      >
+        <label
+          for="frequency"
+        >
+          Frequency
+        </label>
+        <input
+          data-testid="frequency"
+          id="frequency"
+          name="frequency"
+          placeholder="in hours"
+          type="number"
+        />
+        <span />
+      </div>
+      <div
+        class="inputField"
+      >
+        <label
+          for="count"
+        >
+          Count
+        </label>
+        <input
+          data-testid="count"
+          id="count"
+          name="count"
+          type="number"
+        />
+        <span />
+      </div>
+      <input
+        class="submit"
+        data-testid="submit"
+        type="submit"
+        value="Dispatch"
+      />
+    </form>
+  </div>
+</div>
+`;
