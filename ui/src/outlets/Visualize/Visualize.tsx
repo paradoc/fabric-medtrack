@@ -13,6 +13,7 @@ import {
 } from 'recharts'
 
 import styles from './Visualize.module.css'
+import { Link } from 'react-router-dom'
 
 type QueryResult = {
   current: number
@@ -27,7 +28,10 @@ export default function Visualize() {
   const [hasQueried, setHasQueried] = useState(false)
   const { search } = useLocation()
   const searchParams = useMemo(() => new URLSearchParams(search), [search])
-  const medications = searchParams.get('g')?.split(',')
+  const medications = searchParams
+    .get('g')
+    ?.split(',')
+    .map((m) => m.trim())
   const start = searchParams.get('s')
   const end = searchParams.get('e')
 
@@ -87,6 +91,9 @@ export default function Visualize() {
           </ResponsiveContainer>
         </div>
       )}
+      <Link to="/watcher" replace>
+        <button className={styles.update}>Update Query</button>
+      </Link>
     </div>
   )
 }

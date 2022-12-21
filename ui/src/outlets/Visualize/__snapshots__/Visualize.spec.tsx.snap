@@ -22,6 +22,15 @@ exports[`Visualize should match snapshot 1`] = `
         style="width: 100%; height: 100%;"
       />
     </div>
+    <a
+      href="/watcher"
+    >
+      <button
+        class="update"
+      >
+        Update Query
+      </button>
+    </a>
   </div>
 </div>
 `;

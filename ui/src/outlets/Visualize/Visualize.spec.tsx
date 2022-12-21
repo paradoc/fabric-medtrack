@@ -1,5 +1,6 @@
 import { render, waitFor, screen } from '@testing-library/react'
 import React from 'react'
+import { MemoryRouter } from 'react-router'
 import { setupFetchStub } from '../../../setupTests'
 import Visualize from './Visualize'
 
@@ -40,7 +41,11 @@ describe('Visualize', () => {
   })
 
   test('should match snapshot', async () => {
-    const { container } = render(<Visualize />)
+    const { container } = render(
+      <MemoryRouter>
+        <Visualize />
+      </MemoryRouter>
+    )
     await waitFor(() => {
       screen.getByTestId('chart')
     })
