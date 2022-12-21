@@ -14,3 +14,13 @@
   line-height: 28px;
   text-align: center;
 }
+
+.update {
+  border: none;
+  border-radius: 4px;
+  height: 48px;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 200px;
+  color: #333;
+}
