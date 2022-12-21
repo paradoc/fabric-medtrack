@@ -5,9 +5,14 @@ exports[`Watcher should match snapshot 1`] = `
   <div
     class="container"
   >
-    <header>
-      RxWatch
-    </header>
+    <a
+      class="link"
+      href="/watcher"
+    >
+      <header>
+        RxWatch
+      </header>
+    </a>
     <div
       class="outlet"
     />
